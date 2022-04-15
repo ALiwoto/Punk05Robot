@@ -11,10 +11,7 @@ func repostMessageFilter(msg *gotgbot.Message) bool {
 }
 
 func repostMessageHandler(b *gotgbot.Bot, ctx *ext.Context) error {
-	msg := ctx.EffectiveMessage
-	_, _ = msg.Delete(b)
-
-	wv.PendingJobs.Add(generateKey(msg), &wv.PendingJob{
+	wv.PendingJobs.Add(generateKey(ctx.EffectiveMessage), &wv.PendingJob{
 		Bot:     b,
 		Ctx:     ctx,
 		Handler: handleRepost,
@@ -31,6 +28,8 @@ func handleRepost(job *wv.PendingJob) error {
 	if len(theCaption) < 5 {
 		theCaption = ""
 	}
+
+	_, _ = msg.Delete(bot)
 
 	var err error
 
