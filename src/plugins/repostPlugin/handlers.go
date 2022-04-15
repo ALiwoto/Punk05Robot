@@ -1,6 +1,7 @@
 package repostPlugin
 
 import (
+	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
 	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -38,6 +39,10 @@ func repostMessageFilter(msg *gotgbot.Message) bool {
 }
 
 func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	_, err := ctx.EffectiveMessage.Delete(b)
+	if err != nil {
+		logging.Error("while deleteing: ", err)
+	}
 	wv.PendingJobs.Add(generateKey(ctx.EffectiveMessage), &wv.PendingJob{
 		Bot:     b,
 		Ctx:     ctx,
@@ -55,8 +60,6 @@ func handleRepost(job *wv.PendingJob) error {
 	if len(theCaption) < 5 {
 		theCaption = ""
 	}
-
-	_, _ = msg.Delete(bot)
 
 	var err error
 

@@ -4,11 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
 	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
+	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
@@ -49,6 +51,7 @@ func StartTelegramBot() error {
 
 func proccessJobs() error {
 	var handledJobs int
+	var longHandledJobs int
 	var jobs map[string]wv.PendingJob
 	var err error
 	for {
@@ -69,6 +72,12 @@ func proccessJobs() error {
 		}
 
 		for key, job := range jobs {
+			if longHandledJobs > 2*wv.MaxJobsPerSecond {
+				time.Sleep(30 * time.Second)
+				longHandledJobs = 0
+				break
+			}
+
 			if handledJobs > wv.MaxJobsPerSecond {
 				break
 			}
@@ -80,11 +89,23 @@ func proccessJobs() error {
 
 			err = job.Handler(&job)
 			if err != nil {
-				logging.Error("Error while handling job %s: %v", key, err)
+				errStr := err.Error()
+				myStrs := strings.Split(errStr, "Too Many Requests: retry after ")
+				if len(myStrs) >= 2 {
+					theSeconds := ssg.ToInt64(myStrs[1])
+					if theSeconds > 0 {
+						longHandledJobs = 0
+						handledJobs = 0
+						time.Sleep(time.Duration(theSeconds) * time.Second)
+						continue
+					}
+				}
+				logging.Errorf("Error while handling job %s: %v", key, err)
 			}
 
 			wv.PendingJobs.Delete(key)
 			handledJobs++
+			longHandledJobs++
 		}
 
 	}

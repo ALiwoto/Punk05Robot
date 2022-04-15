@@ -53,6 +53,17 @@ func Error(args ...interface{}) {
 	}
 }
 
+func Errorf(template string, args ...interface{}) {
+	if args == nil {
+		return
+	}
+	if SUGARED != nil {
+		SUGARED.Errorf(template, args...)
+	} else {
+		log.Printf(template, args...)
+	}
+}
+
 func Info(args ...interface{}) {
 	if args == nil {
 		return
