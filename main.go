@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/AnimeKaizoku/kaizokuReposterRobot/src/core/logging"
-	"github.com/AnimeKaizoku/kaizokuReposterRobot/src/core/wotoConfig"
-	"github.com/AnimeKaizoku/kaizokuReposterRobot/src/plugins"
+	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
+	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
+	"github.com/AnimeKaizoku/RepostingRobot/src/plugins"
 )
 
 func main() {

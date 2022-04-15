@@ -1,4 +1,4 @@
-module github.com/AnimeKaizoku/kaizokuReposterRobot
+module github.com/AnimeKaizoku/RepostingRobot
 
 go 1.18
 

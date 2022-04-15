@@ -1,7 +1,7 @@
 package repostPlugin
 
 import (
-	wv "github.com/AnimeKaizoku/kaizokuReposterRobot/src/core/wotoValues"
+	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )

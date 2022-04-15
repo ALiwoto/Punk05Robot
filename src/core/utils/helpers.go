@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/ALiwoto/mdparser/mdparser"
-	"github.com/AnimeKaizoku/kaizokuReposterRobot/src/core/logging"
+	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )

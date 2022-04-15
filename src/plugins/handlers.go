@@ -1,7 +1,7 @@
 package plugins
 
 import (
-	"github.com/AnimeKaizoku/kaizokuReposterRobot/src/plugins/repostPlugin"
+	"github.com/AnimeKaizoku/RepostingRobot/src/plugins/repostPlugin"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
 

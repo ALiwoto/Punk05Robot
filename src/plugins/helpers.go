@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AnimeKaizoku/kaizokuReposterRobot/src/core/logging"
-	"github.com/AnimeKaizoku/kaizokuReposterRobot/src/core/wotoConfig"
-	wv "github.com/AnimeKaizoku/kaizokuReposterRobot/src/core/wotoValues"
+	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
+	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
+	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
