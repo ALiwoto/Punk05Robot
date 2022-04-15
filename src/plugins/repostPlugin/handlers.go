@@ -7,7 +7,7 @@ import (
 )
 
 func repostMessageFilter(msg *gotgbot.Message) bool {
-	return isMediaMessage(msg)
+	return isMediaMessage(msg) && msg.Chat.Type == "channel"
 }
 
 func repostMessageHandler(b *gotgbot.Bot, ctx *ext.Context) error {
