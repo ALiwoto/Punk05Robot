@@ -1,16 +1,43 @@
 package repostPlugin
 
 import (
+	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
 	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
 
+func chatMemberFilter(u *gotgbot.ChatMemberUpdated) bool {
+	return u.NewChatMember.GetUser().Id == wv.HelperBot.Id
+}
+
+func chatMemberResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	chatMember := ctx.MyChatMember.NewChatMember
+	if chatMember == nil {
+		return nil
+	}
+
+	if chatMember.GetStatus() == "left" {
+		// bot is leaving, don't handle the update...
+		return nil
+	}
+
+	if !wotoConfig.IsChannelAllowed(ctx.MyChatMember.Chat.Id) {
+		_, _ = b.LeaveChat(ctx.MyChatMember.Chat.Id)
+	}
+	return nil
+}
+
 func repostMessageFilter(msg *gotgbot.Message) bool {
+	if !wotoConfig.IsChannelAllowed(msg.Chat.Id) {
+		_, _ = wv.HelperBot.LeaveChat(msg.Chat.Id)
+		return false
+	}
+
 	return isMediaMessage(msg) && msg.Chat.Type == "channel"
 }
 
-func repostMessageHandler(b *gotgbot.Bot, ctx *ext.Context) error {
+func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	wv.PendingJobs.Add(generateKey(ctx.EffectiveMessage), &wv.PendingJob{
 		Bot:     b,
 		Ctx:     ctx,

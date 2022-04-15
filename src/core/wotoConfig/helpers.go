@@ -16,6 +16,10 @@ func ParseConfig(filename string) (*BotConfig, error) {
 	}
 
 	ConfigSettings = config
+	channelIds = make(map[int64]bool)
+	for _, id := range config.ChannelIds {
+		channelIds[id] = true
+	}
 
 	return ConfigSettings, nil
 }
@@ -37,4 +41,8 @@ func DropUpdates() bool {
 
 func GetCmdPrefixes() []rune {
 	return []rune{'/', '!'}
+}
+
+func IsChannelAllowed(id int64) bool {
+	return channelIds[id]
 }

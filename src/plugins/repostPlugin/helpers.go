@@ -5,6 +5,7 @@ import (
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 )
 
 func isMediaMessage(msg *gotgbot.Message) bool {
@@ -41,8 +42,10 @@ func generateKey(msg *gotgbot.Message) string {
 func LoadAllHandlers(d *ext.Dispatcher, t []rune) {
 	repostMessageHandler := &channelPost{
 		Filter:   repostMessageFilter,
-		Response: repostMessageHandler,
+		Response: repostMessageResponse,
 	}
+	myChatAddedHandler := handlers.NewMyChatMember(chatMemberFilter, chatMemberResponse)
 
 	d.AddHandler(repostMessageHandler)
+	d.AddHandler(myChatAddedHandler)
 }
