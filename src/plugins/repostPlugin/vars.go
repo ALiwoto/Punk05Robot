@@ -1,6 +1,10 @@
 package repostPlugin
 
-import "github.com/PaulSonOfLars/gotgbot/v2"
+import (
+	"sync"
+
+	"github.com/PaulSonOfLars/gotgbot/v2"
+)
 
 var _defaultButtons = &gotgbot.InlineKeyboardMarkup{
 	InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
@@ -12,3 +16,8 @@ var _defaultButtons = &gotgbot.InlineKeyboardMarkup{
 		},
 	},
 }
+
+var (
+	lastKey           uint64 = 1
+	keyGeneratorMutex        = &sync.Mutex{}
+)

@@ -18,4 +18,4 @@ var (
 	PauseJobs bool
 )
 
-var PendingJobs = ssg.NewSafeMap[string, PendingJob]()
+var PendingJobs = ssg.NewSafeMap[uint64, PendingJob]()

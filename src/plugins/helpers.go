@@ -52,7 +52,7 @@ func StartTelegramBot() error {
 func proccessJobs() error {
 	var handledJobs int
 	var longHandledJobs int
-	var jobs map[string]wv.PendingJob
+	var jobs map[uint64]wv.PendingJob
 	var err error
 	for {
 		handledJobs = 0

@@ -1,8 +1,6 @@
 package repostPlugin
 
 import (
-	"strconv"
-
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
@@ -35,8 +33,12 @@ func generateButtons() *gotgbot.InlineKeyboardMarkup {
 	return _defaultButtons
 }
 
-func generateKey(msg *gotgbot.Message) string {
-	return strconv.FormatInt(msg.Chat.Id, 10) + "_" + strconv.FormatInt(msg.MessageId, 10)
+func generateKey() uint64 {
+	keyGeneratorMutex.Lock()
+	defer keyGeneratorMutex.Unlock()
+
+	lastKey++
+	return lastKey
 }
 
 func LoadAllHandlers(d *ext.Dispatcher, t []rune) {
