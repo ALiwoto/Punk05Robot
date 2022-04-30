@@ -43,7 +43,8 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	if err != nil {
 		logging.Error("while deleteing: ", err)
 	}
-	wv.PendingJobs.Add(generateKey(ctx.EffectiveMessage), &wv.PendingJob{
+
+	wv.PendingJobs.Add(generateKey(), &wv.PendingJob{
 		Bot:     b,
 		Ctx:     ctx,
 		Handler: handleRepost,

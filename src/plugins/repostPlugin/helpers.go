@@ -35,9 +35,9 @@ func generateButtons() *gotgbot.InlineKeyboardMarkup {
 
 func generateKey() uint64 {
 	keyGeneratorMutex.Lock()
-	defer keyGeneratorMutex.Unlock()
-
 	lastKey++
+	keyGeneratorMutex.Unlock()
+
 	return lastKey
 }
 
