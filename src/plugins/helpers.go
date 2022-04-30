@@ -52,7 +52,6 @@ func StartTelegramBot() error {
 func proccessJobs() error {
 	var handledJobs int
 	var longHandledJobs int
-	var jobs map[uint64]wv.PendingJob
 	var err error
 	for {
 		handledJobs = 0
@@ -66,28 +65,22 @@ func proccessJobs() error {
 			continue
 		}
 
-		jobs = wv.PendingJobs.ToNormalMap()
-		if len(jobs) == 0 {
-			continue
-		}
-
-		for key, job := range jobs {
+		wv.PendingJobs.ForEach(func(key uint64, job *wv.PendingJob) bool {
 			if longHandledJobs > 2*wv.MaxJobsPerSecond {
 				time.Sleep(30 * time.Second)
 				longHandledJobs = 0
-				break
+				return false
 			}
 
 			if handledJobs > wv.MaxJobsPerSecond {
-				break
+				return false
 			}
 
 			if job.Handler == nil {
-				wv.PendingJobs.Delete(key)
-				continue
+				return true
 			}
 
-			err = job.Handler(&job)
+			err = job.Handler(job)
 			if err != nil {
 				errStr := err.Error()
 				myStrs := strings.Split(errStr, "Too Many Requests: retry after ")
@@ -97,16 +90,15 @@ func proccessJobs() error {
 						longHandledJobs = 0
 						handledJobs = 0
 						time.Sleep(time.Duration(theSeconds) * time.Second)
-						continue
+						return false
 					}
 				}
 				logging.Errorf("Error while handling job %s: %v", key, err)
 			}
 
-			wv.PendingJobs.Delete(key)
 			handledJobs++
 			longHandledJobs++
-		}
-
+			return true
+		})
 	}
 }
