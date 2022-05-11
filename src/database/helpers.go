@@ -2,7 +2,7 @@ package database
 
 import (
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
-	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
+	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -25,7 +25,7 @@ func StartDatabase() error {
 	}
 
 	SESSION = db
-	wotoValues.DatabaseSession = db
+	wv.DatabaseSession = db
 
 	logging.Info("Database connected ")
 
@@ -48,5 +48,31 @@ func StartDatabase() error {
 }
 
 func LoadChannelsSettings() error {
+	var allSettings []*wv.ChannelSettings
+
+	lockDatabase()
+	err := SESSION.Find(&allSettings).Error
+	unlockDatabase()
+
+	if err != nil {
+		return err
+	}
+
+	if len(allSettings) != 0 {
+		channelsSettings.AddPointerList(settingskeyGetter, allSettings...)
+	}
+
 	return nil
+}
+
+func settingskeyGetter(s *wv.ChannelSettings) int64 {
+	return s.ChannelId
+}
+
+func lockDatabase() {
+	mutex.Lock()
+}
+
+func unlockDatabase() {
+	mutex.Unlock()
 }
