@@ -55,6 +55,16 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 			return ext.ContinueGroups
 		}
 
+		if !settings.IgnoreRepeatChecker {
+			fId := getFilesId(msg)
+			if repeatCheckerMap.GetValue(fId) {
+				// this post is repeated
+				return ext.ContinueGroups
+			}
+
+			repeatCheckerMap.Set(fId, true)
+		}
+
 		distance = mediaGroupDistance
 	}
 	_, err := ctx.EffectiveMessage.Delete(b)

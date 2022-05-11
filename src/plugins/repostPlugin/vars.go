@@ -18,6 +18,10 @@ var _defaultButtons = &gotgbot.InlineKeyboardMarkup{
 }
 
 var (
+	repeatCheckerMap = _getRepeatCheckerMap()
+)
+
+var (
 	lastKey           uint64 = 1
 	keyGeneratorMutex        = &sync.Mutex{}
 )
