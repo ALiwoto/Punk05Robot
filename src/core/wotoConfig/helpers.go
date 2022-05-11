@@ -43,6 +43,6 @@ func GetCmdPrefixes() []rune {
 	return []rune{'/', '!'}
 }
 
-func IsUserSudo(id int64) bool {
+func IsSudoUser(id int64) bool {
 	return sudoUsers[id]
 }
