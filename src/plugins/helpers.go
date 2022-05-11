@@ -66,6 +66,10 @@ func proccessJobs() error {
 		}
 
 		wv.PendingJobs.ForEach(func(key uint64, job *wv.PendingJob) bool {
+			if !job.ShouldBeHandled() {
+				return false
+			}
+
 			if longHandledJobs > 2*wv.MaxJobsPerSecond {
 				time.Sleep(30 * time.Second)
 				longHandledJobs = 0

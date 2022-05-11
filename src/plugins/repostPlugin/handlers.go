@@ -1,6 +1,8 @@
 package repostPlugin
 
 import (
+	"time"
+
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
 	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/RepostingRobot/src/database"
@@ -39,15 +41,33 @@ func repostMessageFilter(msg *gotgbot.Message) bool {
 }
 
 func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	if ctx.EditedChannelPost != nil {
+		return ext.ContinueGroups
+	}
+
+	msg := ctx.EffectiveMessage
+	chat := ctx.EffectiveChat
+	var distance time.Duration
+
+	settings := database.GetChannelSettings(chat.Id)
+	if msg.MediaGroupId != "" {
+		if settings.IgnoreMediaGroups {
+			return ext.ContinueGroups
+		}
+
+		distance = mediaGroupDistance
+	}
 	_, err := ctx.EffectiveMessage.Delete(b)
 	if err != nil {
 		logging.Error("while deleteing: ", err)
 	}
 
 	wv.PendingJobs.Add(generateKey(), &wv.PendingJob{
-		Bot:     b,
-		Ctx:     ctx,
-		Handler: handleRepost,
+		Bot:            b,
+		Ctx:            ctx,
+		Handler:        handleRepost,
+		RegisteredTime: time.Now(),
+		TimeDistance:   distance,
 	})
 
 	return nil
