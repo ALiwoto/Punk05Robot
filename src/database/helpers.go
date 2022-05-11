@@ -65,6 +65,22 @@ func LoadChannelsSettings() error {
 	return nil
 }
 
+func GetChannelSettings(id int64) *wv.ChannelSettings {
+	return channelsSettings.Get(id)
+}
+
+func SaveChannelSettings(settings *wv.ChannelSettings, cache bool) {
+	lockDatabase()
+	tx := SESSION.Begin()
+	tx.Save(settings)
+	tx.Commit()
+	unlockDatabase()
+
+	if cache {
+		channelsSettings.Add(settings.ChannelId, settings)
+	}
+}
+
 func settingskeyGetter(s *wv.ChannelSettings) int64 {
 	return s.ChannelId
 }
