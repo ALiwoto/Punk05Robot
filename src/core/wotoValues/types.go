@@ -25,4 +25,5 @@ type ChannelSettings struct {
 	// IgnoreRepeatChecker field is set to true only if the bot is not
 	// supposed to check for repeating post and remove them.
 	IgnoreRepeatChecker bool `json:"ignore_repeat_checker"`
+	IsTmpIgnoring       bool `json:"is_tmp_ignoring" sql:"-" gorm:"-"`
 }

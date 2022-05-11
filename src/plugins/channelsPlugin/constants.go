@@ -1,5 +1,6 @@
 package channelsPlugin
 
 const (
-	registerCmd = "register"
+	registerCmd  = "register"
+	tmpIgnoreCmd = "tmpignore"
 )

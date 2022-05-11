@@ -50,3 +50,56 @@ func registerCommandResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	return ext.EndGroups
 }
+
+func tmpIgnoreResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	user := ctx.EffectiveUser
+	msg := ctx.EffectiveMessage
+	if wotoConfig.IsSudoUser(user.Id) {
+		return ext.ContinueGroups
+	}
+
+	myStrs := ssg.Split(msg.Text)
+	if len(myStrs) < 2 {
+		md := mdparser.GetBold("Usage: ").TabThis()
+		md.Normal("/tmpIgnore ").Mono("channel_id")
+		_, _ = msg.Reply(b, md.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: wv.MarkdownV2,
+		})
+
+		return ext.EndGroups
+	}
+
+	channelId := ssg.ToInt64(myStrs[1])
+	if channelId == 0 {
+		md := mdparser.GetNormal("Invalid chat-id provided.")
+		_, _ = msg.Reply(b, md.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: wv.MarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings := database.GetChannelSettings(channelId)
+	if settings == nil {
+		md := mdparser.GetNormal("Channel is not registered.")
+		_, _ = msg.Reply(b, md.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: wv.MarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	if settings.IsTmpIgnoring {
+		settings.IsTmpIgnoring = false
+		md := mdparser.GetNormal("I won't ignore this channel anymore.")
+		_, _ = msg.Reply(b, md.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: wv.MarkdownV2,
+		})
+		return ext.EndGroups
+	} else {
+		settings.IsTmpIgnoring = true
+		md := mdparser.GetNormal("I will temporary ignore this channel from now on.")
+		_, _ = msg.Reply(b, md.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: wv.MarkdownV2,
+		})
+		return ext.EndGroups
+	}
+}
