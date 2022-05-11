@@ -2,8 +2,8 @@ package repostPlugin
 
 import (
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
-	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
 	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
+	"github.com/AnimeKaizoku/RepostingRobot/src/database"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
@@ -23,14 +23,14 @@ func chatMemberResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		return nil
 	}
 
-	if !wotoConfig.IsChannelAllowed(ctx.MyChatMember.Chat.Id) {
+	if !database.IsChannelRegistered(ctx.MyChatMember.Chat.Id) {
 		_, _ = b.LeaveChat(ctx.MyChatMember.Chat.Id)
 	}
 	return nil
 }
 
 func repostMessageFilter(msg *gotgbot.Message) bool {
-	if !wotoConfig.IsChannelAllowed(msg.Chat.Id) {
+	if !database.IsChannelRegistered(msg.Chat.Id) {
 		_, _ = wv.HelperBot.LeaveChat(msg.Chat.Id)
 		return false
 	}

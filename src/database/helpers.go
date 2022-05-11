@@ -81,6 +81,10 @@ func SaveChannelSettings(settings *wv.ChannelSettings, cache bool) {
 	}
 }
 
+func IsChannelRegistered(id int64) bool {
+	return channelsSettings.Exists(id)
+}
+
 func settingskeyGetter(s *wv.ChannelSettings) int64 {
 	return s.ChannelId
 }

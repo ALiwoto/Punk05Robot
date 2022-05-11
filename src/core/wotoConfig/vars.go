@@ -1,4 +1,4 @@
 package wotoConfig
 
 var ConfigSettings *BotConfig
-var channelIds map[int64]bool
+var sudoUsers map[int64]bool

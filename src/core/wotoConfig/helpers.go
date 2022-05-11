@@ -16,9 +16,9 @@ func ParseConfig(filename string) (*BotConfig, error) {
 	}
 
 	ConfigSettings = config
-	channelIds = make(map[int64]bool)
-	for _, id := range config.ChannelIds {
-		channelIds[id] = true
+	sudoUsers = make(map[int64]bool)
+	for _, id := range config.SudoUsers {
+		sudoUsers[id] = true
 	}
 
 	return ConfigSettings, nil
@@ -43,6 +43,6 @@ func GetCmdPrefixes() []rune {
 	return []rune{'/', '!'}
 }
 
-func IsChannelAllowed(id int64) bool {
-	return channelIds[id]
+func IsUserSudo(id int64) bool {
+	return sudoUsers[id]
 }
