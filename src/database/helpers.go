@@ -2,6 +2,7 @@ package database
 
 import (
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
+	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
 	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"gorm.io/driver/sqlite"
@@ -44,7 +45,15 @@ func StartDatabase() error {
 		return err
 	}
 
+	err = LoadChannelAccessElements()
+	if err != nil {
+		return err
+	}
+
 	logging.Info("Auto-migrated database schema")
+
+	// additional registering stuff
+	RegisterNewChannels(wotoConfig.GetChannelIDs())
 
 	return nil
 }
@@ -93,6 +102,27 @@ func GetUserAllAccess(userId int64) []*wv.ChannelAccessElement {
 	return userAccessChannels.GetValue(userId)
 }
 
+// RegisterNewChannels registers new default settings for the given
+// channel-ids (if and only if the channel is not already registered.)
+func RegisterNewChannels(ids []int64) {
+	if len(ids) == 0 {
+		return
+	}
+
+	var settings *wv.ChannelSettings
+	for _, current := range ids {
+		settings = GetChannelSettings(current)
+		if settings != nil {
+			// settings already exists, skip
+			continue
+		}
+
+		SaveChannelSettings(&wv.ChannelSettings{
+			ChannelId: current,
+		}, true)
+	}
+}
+
 func SaveChannelSettings(settings *wv.ChannelSettings, cache bool) {
 	lockDatabase()
 	tx := SESSION.Begin()
@@ -101,6 +131,10 @@ func SaveChannelSettings(settings *wv.ChannelSettings, cache bool) {
 	unlockDatabase()
 
 	if cache {
+		if settings.AccessMap == nil {
+			settings.AccessMap = ssg.NewSafeMap[int64, wv.ChannelAccessElement]()
+		}
+
 		channelsSettings.Add(settings.ChannelId, settings)
 	}
 }
