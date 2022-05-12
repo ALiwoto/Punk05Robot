@@ -3,6 +3,7 @@ package wotoValues
 import (
 	"time"
 
+	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
@@ -26,4 +27,13 @@ type ChannelSettings struct {
 	// supposed to check for repeating post and remove them.
 	IgnoreRepeatChecker bool `json:"ignore_repeat_checker"`
 	IsTmpIgnoring       bool `json:"is_tmp_ignoring" sql:"-" gorm:"-"`
+
+	AccessMap *ssg.SafeMap[int64, ChannelAccessElement] `json:"-" sql:"-" gorm:"-"`
+}
+
+type ChannelAccessElement struct {
+	AccessUniqueId string `gorm:"primaryKey"`
+	UserId         int64
+	ChannelId      int64
+	AddedBy        int64
 }

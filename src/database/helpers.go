@@ -32,6 +32,7 @@ func StartDatabase() error {
 	// create tables if they don't exist
 	err = SESSION.AutoMigrate(
 		modelChannelsSettings,
+		modelChannelAccessElement,
 	)
 	if err != nil {
 		return err
@@ -48,6 +49,24 @@ func StartDatabase() error {
 }
 
 func LoadChannelsSettings() error {
+	var allSettings []*wv.ChannelSettings
+
+	lockDatabase()
+	err := SESSION.Find(&allSettings).Error
+	unlockDatabase()
+
+	if err != nil {
+		return err
+	}
+
+	if len(allSettings) != 0 {
+		channelsSettings.AddPointerList(settingskeyGetter, allSettings...)
+	}
+
+	return nil
+}
+
+func LoadChannelAccessElements() error {
 	var allSettings []*wv.ChannelSettings
 
 	lockDatabase()

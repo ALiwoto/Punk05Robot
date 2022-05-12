@@ -8,8 +8,9 @@ import (
 )
 
 var (
-	mutex                 = &sync.Mutex{}
-	modelChannelsSettings = &wv.ChannelSettings{}
+	mutex                     = &sync.Mutex{}
+	modelChannelsSettings     = &wv.ChannelSettings{}
+	modelChannelAccessElement = &wv.ChannelAccessElement{}
 )
 
 var (
