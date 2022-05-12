@@ -5,6 +5,7 @@ import (
 
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
+	"github.com/AnimeKaizoku/RepostingRobot/src/database"
 	"github.com/AnimeKaizoku/RepostingRobot/src/plugins"
 )
 
@@ -17,6 +18,11 @@ func main() {
 	f := logging.LoadLogger()
 	if f != nil {
 		defer f()
+	}
+
+	err = database.StartDatabase()
+	if err != nil {
+		logging.Fatal("Error starting database", err)
 	}
 
 	err = plugins.StartTelegramBot()
