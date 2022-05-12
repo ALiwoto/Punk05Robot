@@ -13,7 +13,7 @@ import (
 func registerCommandResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	user := ctx.EffectiveUser
 	msg := ctx.EffectiveMessage
-	if wotoConfig.IsSudoUser(user.Id) {
+	if !wotoConfig.IsSudoUser(user.Id) {
 		return ext.ContinueGroups
 	}
 
@@ -54,7 +54,7 @@ func registerCommandResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 func tmpIgnoreResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	user := ctx.EffectiveUser
 	msg := ctx.EffectiveMessage
-	if wotoConfig.IsSudoUser(user.Id) {
+	if !wotoConfig.IsSudoUser(user.Id) {
 		return ext.ContinueGroups
 	}
 
