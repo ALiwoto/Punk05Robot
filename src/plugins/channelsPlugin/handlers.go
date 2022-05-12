@@ -1,6 +1,8 @@
 package channelsPlugin
 
 import (
+	"strconv"
+
 	"github.com/ALiwoto/mdparser/mdparser"
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
 	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
@@ -31,6 +33,17 @@ func registerCommandResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	channelId := ssg.ToInt64(myStrs[1])
 	if channelId == 0 {
 		md := mdparser.GetNormal("Invalid chat-id provided.")
+		_, _ = msg.Reply(b, md.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: wv.MarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings := database.GetChannelSettings(channelId)
+	if settings != nil {
+		md := mdparser.GetNormal("Channel with id ")
+		md.Mono(strconv.FormatInt(channelId, 10))
+		md.Normal(" is already registered.")
 		_, _ = msg.Reply(b, md.ToString(), &gotgbot.SendMessageOpts{
 			ParseMode: wv.MarkdownV2,
 		})
