@@ -103,3 +103,7 @@ func tmpIgnoreResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.EndGroups
 	}
 }
+
+func addUserResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	return nil
+}
