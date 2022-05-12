@@ -17,7 +17,7 @@ func registerCommandResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.ContinueGroups
 	}
 
-	myStrs := ssg.Split(msg.Text)
+	myStrs := ssg.Split(msg.Text, " ", "\n")
 	if len(myStrs) < 2 {
 		md := mdparser.GetBold("Usage: ").TabThis()
 		md.Normal("/register ").Mono("channel_id")
@@ -58,7 +58,7 @@ func tmpIgnoreResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.ContinueGroups
 	}
 
-	myStrs := ssg.Split(msg.Text)
+	myStrs := ssg.Split(msg.Text, " ", "\n")
 	if len(myStrs) < 2 {
 		md := mdparser.GetBold("Usage: ").TabThis()
 		md.Normal("/tmpIgnore ").Mono("channel_id")
