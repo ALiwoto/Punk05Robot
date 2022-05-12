@@ -89,8 +89,8 @@ func LoadAllHandlers(d *ext.Dispatcher, t []rune) {
 
 func _getRepeatCheckerMap() *ssg.SafeEMap[string, bool] {
 	m := ssg.NewSafeEMap[string, bool]()
-	m.SetInterval(5 * time.Second)
-	m.SetExpiration(2 * mediaGroupDistance)
+	m.SetInterval(45 * time.Second)
+	m.SetExpiration(5 * mediaGroupDistance)
 	m.EnableChecking()
 
 	return m

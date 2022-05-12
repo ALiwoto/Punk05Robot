@@ -48,6 +48,7 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	msg := ctx.EffectiveMessage
 	chat := ctx.EffectiveChat
 	var distance time.Duration
+	shouldDeleteMessage := true
 
 	settings := database.GetChannelSettings(chat.Id)
 	if settings.IsTmpIgnoring {
@@ -69,19 +70,27 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 			repeatCheckerMap.Set(fId, true)
 		}
 
+		shouldDeleteMessage = false
 		distance = mediaGroupDistance
 	}
-	_, err := ctx.EffectiveMessage.Delete(b)
-	if err != nil {
-		logging.Error("while deleteing: ", err)
+
+	if shouldDeleteMessage {
+		_, err := ctx.EffectiveMessage.Delete(b)
+		if err != nil {
+			logging.Error("while deleteing: ", err)
+		}
+		shouldDeleteMessage = false
+	} else {
+		shouldDeleteMessage = true
 	}
 
 	wv.PendingJobs.Add(generateKey(), &wv.PendingJob{
-		Bot:            b,
-		Ctx:            ctx,
-		Handler:        handleRepost,
-		RegisteredTime: time.Now(),
-		TimeDistance:   distance,
+		Bot:                 b,
+		Ctx:                 ctx,
+		ShouldDeleteMessage: shouldDeleteMessage,
+		Handler:             handleRepost,
+		RegisteredTime:      time.Now(),
+		TimeDistance:        distance,
 	})
 
 	return nil
@@ -89,6 +98,14 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 
 func handleRepost(job *wv.PendingJob) error {
 	msg := job.Ctx.EffectiveMessage
+	if job.ShouldDeleteMessage {
+		_, err := msg.Delete(job.Bot)
+		if err != nil {
+			logging.Error("while deleteing: ", err)
+		}
+		job.ShouldDeleteMessage = false
+	}
+
 	chat := msg.Chat
 	bot := job.Bot
 	theCaption := "@" + chat.Username

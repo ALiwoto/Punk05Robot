@@ -9,11 +9,12 @@ import (
 )
 
 type PendingJob struct {
-	Bot            *gotgbot.Bot
-	Ctx            *ext.Context
-	Handler        func(job *PendingJob) error
-	RegisteredTime time.Time
-	TimeDistance   time.Duration
+	Bot                 *gotgbot.Bot
+	Ctx                 *ext.Context
+	ShouldDeleteMessage bool
+	Handler             func(job *PendingJob) error
+	RegisteredTime      time.Time
+	TimeDistance        time.Duration
 }
 
 type ChannelSettings struct {
