@@ -46,3 +46,10 @@ func GetCmdPrefixes() []rune {
 func IsSudoUser(id int64) bool {
 	return sudoUsers[id]
 }
+
+func GetChannelIDs() []int64 {
+	if ConfigSettings != nil {
+		return ConfigSettings.ChannelIds
+	}
+	return nil
+}
