@@ -3,6 +3,7 @@ package database
 import (
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
 	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
+	"github.com/AnimeKaizoku/ssg/ssg"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -67,18 +68,18 @@ func LoadChannelsSettings() error {
 }
 
 func LoadChannelAccessElements() error {
-	var allSettings []*wv.ChannelSettings
+	var allElements []*wv.ChannelAccessElement
 
 	lockDatabase()
-	err := SESSION.Find(&allSettings).Error
+	err := SESSION.Find(&allElements).Error
 	unlockDatabase()
 
 	if err != nil {
 		return err
 	}
 
-	if len(allSettings) != 0 {
-		channelsSettings.AddPointerList(settingskeyGetter, allSettings...)
+	for _, current := range allElements {
+		cacheAccessElement(current)
 	}
 
 	return nil
@@ -86,6 +87,10 @@ func LoadChannelAccessElements() error {
 
 func GetChannelSettings(id int64) *wv.ChannelSettings {
 	return channelsSettings.Get(id)
+}
+
+func GetUserAllAccess(userId int64) []*wv.ChannelAccessElement {
+	return userAccessChannels.GetValue(userId)
 }
 
 func SaveChannelSettings(settings *wv.ChannelSettings, cache bool) {
@@ -100,11 +105,39 @@ func SaveChannelSettings(settings *wv.ChannelSettings, cache bool) {
 	}
 }
 
+func SaveAccessElement(element *wv.ChannelAccessElement, cache bool) {
+	lockDatabase()
+	tx := SESSION.Begin()
+	tx.Save(element)
+	tx.Commit()
+	unlockDatabase()
+
+	if cache {
+		cacheAccessElement(element)
+	}
+}
+
+func cacheAccessElement(element *wv.ChannelAccessElement) {
+	settings := GetChannelSettings(element.ChannelId)
+	if settings == nil {
+		return
+	}
+
+	settings.AccessMap.Add(element.UserId, element)
+	userAllAccess := userAccessChannels.GetValue(element.UserId)
+	userAllAccess = append(userAllAccess, element)
+	userAccessChannels.Set(element.UserId, userAllAccess)
+}
+
 func IsChannelRegistered(id int64) bool {
 	return channelsSettings.Exists(id)
 }
 
 func settingskeyGetter(s *wv.ChannelSettings) int64 {
+	if s.AccessMap == nil {
+		s.AccessMap = ssg.NewSafeMap[int64, wv.ChannelAccessElement]()
+	}
+
 	return s.ChannelId
 }
 

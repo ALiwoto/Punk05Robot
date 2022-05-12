@@ -14,5 +14,6 @@ var (
 )
 
 var (
-	channelsSettings = ssg.NewSafeMap[int64, wv.ChannelSettings]()
+	channelsSettings   = ssg.NewSafeMap[int64, wv.ChannelSettings]()
+	userAccessChannels = ssg.NewSafeMap[int64, []*wv.ChannelAccessElement]()
 )
