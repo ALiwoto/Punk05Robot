@@ -10,6 +10,7 @@ import (
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
 	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
 	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
+	"github.com/AnimeKaizoku/RepostingRobot/src/database"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
@@ -66,7 +67,7 @@ func proccessJobs() error {
 		}
 
 		wv.PendingJobs.ForEach(func(key uint64, job *wv.PendingJob) bool {
-			if !job.ShouldBeHandled() {
+			if !job.ShouldBeHandled() || database.IsTmpIgnoring(job.Ctx.EffectiveChat.Id) {
 				return false
 			}
 

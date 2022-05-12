@@ -94,6 +94,11 @@ func LoadChannelAccessElements() error {
 	return nil
 }
 
+func IsTmpIgnoring(channelId int64) bool {
+	settings := GetChannelSettings(channelId)
+	return settings != nil && settings.IsTmpIgnoring
+}
+
 func GetChannelSettings(id int64) *wv.ChannelSettings {
 	return channelsSettings.Get(id)
 }

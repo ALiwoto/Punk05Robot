@@ -50,6 +50,10 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	var distance time.Duration
 
 	settings := database.GetChannelSettings(chat.Id)
+	if settings.IsTmpIgnoring {
+		return ext.ContinueGroups
+	}
+
 	if msg.MediaGroupId != "" {
 		if settings.IgnoreMediaGroups {
 			return ext.ContinueGroups
