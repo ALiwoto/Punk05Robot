@@ -71,8 +71,8 @@ func proccessJobs() error {
 				return false
 			}
 
-			if longHandledJobs > 4*wv.MaxJobsPerSecond {
-				time.Sleep(15 * time.Second)
+			if longHandledJobs > 10*wv.MaxJobsPerSecond {
+				time.Sleep(2 * time.Second)
 				longHandledJobs = 0
 				return false
 			}
