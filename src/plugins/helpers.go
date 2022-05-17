@@ -56,7 +56,7 @@ func proccessJobs() error {
 	var err error
 	for {
 		handledJobs = 0
-		time.Sleep(2 * time.Second)
+		time.Sleep(time.Second)
 
 		if wv.PendingJobs == nil || wv.HaltJobs {
 			return nil
@@ -71,8 +71,8 @@ func proccessJobs() error {
 				return false
 			}
 
-			if longHandledJobs > 2*wv.MaxJobsPerSecond {
-				time.Sleep(30 * time.Second)
+			if longHandledJobs > 4*wv.MaxJobsPerSecond {
+				time.Sleep(15 * time.Second)
 				longHandledJobs = 0
 				return false
 			}

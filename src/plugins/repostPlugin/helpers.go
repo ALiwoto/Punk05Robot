@@ -3,6 +3,7 @@ package repostPlugin
 import (
 	"time"
 
+	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
@@ -69,11 +70,7 @@ func generateButtons() *gotgbot.InlineKeyboardMarkup {
 }
 
 func generateKey() uint64 {
-	keyGeneratorMutex.Lock()
-	lastKey++
-	keyGeneratorMutex.Unlock()
-
-	return lastKey
+	return jobsKeyGenerator.Next()
 }
 
 func LoadAllHandlers(d *ext.Dispatcher, t []rune) {
@@ -91,6 +88,15 @@ func _getRepeatCheckerMap() *ssg.SafeEMap[string, bool] {
 	m := ssg.NewSafeEMap[string, bool]()
 	m.SetInterval(45 * time.Second)
 	m.SetExpiration(5 * mediaGroupDistance)
+	m.EnableChecking()
+
+	return m
+}
+
+func _getMediaGroupMessagesMap() *ssg.SafeEMap[string, []*wv.PendingJob] {
+	m := ssg.NewSafeEMap[string, []*wv.PendingJob]()
+	m.SetInterval(time.Minute)
+	m.SetExpiration(15 * mediaGroupDistance)
 	m.EnableChecking()
 
 	return m

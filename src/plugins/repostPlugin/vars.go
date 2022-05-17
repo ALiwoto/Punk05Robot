@@ -1,8 +1,7 @@
 package repostPlugin
 
 import (
-	"sync"
-
+	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 )
 
@@ -18,10 +17,10 @@ var _defaultButtons = &gotgbot.InlineKeyboardMarkup{
 }
 
 var (
-	repeatCheckerMap = _getRepeatCheckerMap()
+	repeatCheckerMap      = _getRepeatCheckerMap()
+	mediaGroupMessagesMap = _getMediaGroupMessagesMap()
 )
 
 var (
-	lastKey           uint64 = 1
-	keyGeneratorMutex        = &sync.Mutex{}
+	jobsKeyGenerator = ssg.NewNumIdGenerator[uint64]()
 )

@@ -84,16 +84,40 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		shouldDeleteMessage = true
 	}
 
-	wv.PendingJobs.Add(generateKey(), &wv.PendingJob{
+	job := &wv.PendingJob{
 		Bot:                 b,
 		Ctx:                 ctx,
 		ShouldDeleteMessage: shouldDeleteMessage,
 		Handler:             handleRepost,
 		RegisteredTime:      time.Now(),
 		TimeDistance:        distance,
-	})
+	}
+
+	if msg.MediaGroupId != "" {
+		addJobToMediaGroupMessagesMap(msg.MediaGroupId, job)
+		updateAllMediaGroupsRegisteredTime(msg.MediaGroupId, job.RegisteredTime)
+	}
+
+	wv.PendingJobs.Add(generateKey(), job)
 
 	return nil
+}
+
+func updateAllMediaGroupsRegisteredTime(id string, t time.Time) {
+	jobs := mediaGroupMessagesMap.GetValue(id)
+	if len(jobs) == 0 {
+		return
+	}
+
+	for _, current := range jobs {
+		current.RegisteredTime = t
+	}
+}
+
+func addJobToMediaGroupMessagesMap(id string, j *wv.PendingJob) {
+	jobs := mediaGroupMessagesMap.GetValue(id)
+	jobs = append(jobs, j)
+	mediaGroupMessagesMap.Set(id, jobs)
 }
 
 func handleRepost(job *wv.PendingJob) error {

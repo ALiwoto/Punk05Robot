@@ -3,5 +3,5 @@ package repostPlugin
 import "time"
 
 const (
-	mediaGroupDistance = 5 * time.Second
+	mediaGroupDistance = 2 * time.Second
 )
