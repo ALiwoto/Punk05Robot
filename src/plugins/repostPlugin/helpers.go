@@ -93,8 +93,8 @@ func _getRepeatCheckerMap() *ssg.SafeEMap[string, bool] {
 	return m
 }
 
-func _getMediaGroupMessagesMap() *ssg.SafeEMap[string, []*wv.PendingJob] {
-	m := ssg.NewSafeEMap[string, []*wv.PendingJob]()
+func _getMediaGroupMessagesMap() *ssg.SafeEMap[int64, []*wv.PendingJob] {
+	m := ssg.NewSafeEMap[int64, []*wv.PendingJob]()
 	m.SetInterval(time.Minute)
 	m.SetExpiration(15 * mediaGroupDistance)
 	m.EnableChecking()

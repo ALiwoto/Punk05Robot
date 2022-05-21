@@ -94,8 +94,8 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	if msg.MediaGroupId != "" {
-		addJobToMediaGroupMessagesMap(msg.MediaGroupId, job)
-		updateAllMediaGroupsRegisteredTime(msg.MediaGroupId, job.RegisteredTime)
+		addJobToMediaGroupMessagesMap(chat.Id, job)
+		updateAllMediaGroupsRegisteredTime(chat.Id, job.RegisteredTime)
 	}
 
 	wv.PendingJobs.Add(generateKey(), job)
@@ -103,8 +103,8 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	return nil
 }
 
-func updateAllMediaGroupsRegisteredTime(id string, t time.Time) {
-	jobs := mediaGroupMessagesMap.GetValue(id)
+func updateAllMediaGroupsRegisteredTime(chatId int64, t time.Time) {
+	jobs := mediaGroupMessagesMap.GetValue(chatId)
 	if len(jobs) == 0 {
 		return
 	}
@@ -112,10 +112,10 @@ func updateAllMediaGroupsRegisteredTime(id string, t time.Time) {
 	for _, current := range jobs {
 		current.RegisteredTime = t
 	}
-	mediaGroupMessagesMap.Set(id, jobs)
+	mediaGroupMessagesMap.Set(chatId, jobs)
 }
 
-func addJobToMediaGroupMessagesMap(id string, j *wv.PendingJob) {
+func addJobToMediaGroupMessagesMap(id int64, j *wv.PendingJob) {
 	jobs := mediaGroupMessagesMap.GetValue(id)
 	jobs = append(jobs, j)
 	mediaGroupMessagesMap.Set(id, jobs)
