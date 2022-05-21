@@ -112,6 +112,7 @@ func updateAllMediaGroupsRegisteredTime(id string, t time.Time) {
 	for _, current := range jobs {
 		current.RegisteredTime = t
 	}
+	mediaGroupMessagesMap.Set(id, jobs)
 }
 
 func addJobToMediaGroupMessagesMap(id string, j *wv.PendingJob) {
