@@ -125,7 +125,7 @@ func setFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		myStrs := ctx.Args()
 		if len(myStrs) < 2 {
 			txt := mdparser.GetNormal("Usage: ")
-			txt.AppendMono("/setFooter -100123456 TEXT HERE (or reply)")
+			txt.Mono("/setFooter -100123456 TEXT HERE (or reply)")
 			_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
 				ParseMode: gotgbot.ParseModeMarkdownV2,
 			})
@@ -141,7 +141,7 @@ func setFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		myStrs := ssg.SplitN(message.Text, 3, " ")
 		if len(myStrs) < 3 {
 			txt := mdparser.GetNormal("Usage: ")
-			txt.AppendMono("/setFooter -100123456 TEXT HERE (or reply)")
+			txt.Mono("/setFooter -100123456 TEXT HERE (or reply)")
 			_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
 				ParseMode: gotgbot.ParseModeMarkdownV2,
 			})
@@ -191,7 +191,7 @@ func setButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		myStrs := ctx.Args()
 		if len(myStrs) < 2 {
 			txt := mdparser.GetNormal("Usage: ")
-			txt.AppendMono("/setButtons -100123456 TEXT HERE (or reply)")
+			txt.Mono("/setButtons -100123456 TEXT HERE (or reply)")
 			_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
 				ParseMode: gotgbot.ParseModeMarkdownV2,
 			})
@@ -207,7 +207,7 @@ func setButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		myStrs := ssg.SplitN(message.Text, 3, " ")
 		if len(myStrs) < 3 {
 			txt := mdparser.GetNormal("Usage: ")
-			txt.AppendMono("/setButtons -100123456 TEXT HERE (or reply)")
+			txt.Mono("/setButtons -100123456 TEXT HERE (or reply)")
 			_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
 				ParseMode: gotgbot.ParseModeMarkdownV2,
 			})
