@@ -1,6 +1,7 @@
 package wotoValues
 
 import (
+	"github.com/ALiwoto/mdparser/mdparser"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
@@ -21,3 +22,29 @@ var (
 )
 
 var PendingJobs = ssg.NewSafeMap[uint64, PendingJob]()
+
+var MoreContentButtons = &gotgbot.InlineKeyboardMarkup{
+	InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
+		{
+			{
+				Text: "🔘More Content",
+				Url:  "http://t.me/Kaizoku",
+			},
+		},
+	},
+}
+
+var DefaultImplementedButtons = map[ButtonsUniqueId]*gotgbot.InlineKeyboardMarkup{
+	ButtonsMoreContent: {
+		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
+			{
+				{
+					Text: "🔘More Content",
+					Url:  "http://t.me/Kaizoku",
+				},
+			},
+		},
+	},
+}
+
+var MoreContentsMd = mdparser.GetHyperLink("🔘More Content", "http://t.me/Kaizoku")

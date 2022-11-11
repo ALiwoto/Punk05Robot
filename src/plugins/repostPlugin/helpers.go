@@ -3,6 +3,7 @@ package repostPlugin
 import (
 	"time"
 
+	"github.com/ALiwoto/mdparser/mdparser"
 	wv "github.com/AnimeKaizoku/Punk05Robot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -11,11 +12,21 @@ import (
 )
 
 func getCaption(job *wv.PendingJob) string {
-	return ""
+	md := mdparser.GetNormal(job.Settings.FooterText)
+	md.ReplaceMd(
+		mdparser.GetNormal("CHANNEL_USERNAME"),
+		mdparser.GetNormal("@"+job.Ctx.EffectiveChat.Username),
+	)
+	md.ReplaceMd(
+		mdparser.GetNormal("MORE_CONTENTS"),
+		wv.MoreContentsMd,
+	)
+	return md.ToString()
 }
 
 func getButtons(job *wv.PendingJob) *gotgbot.InlineKeyboardMarkup {
-	return nil
+	// TODO: Add support for getting buttons from db using their unique id.
+	return wv.DefaultImplementedButtons[job.Settings.ButtonsUniqueId]
 }
 
 func isMediaMessage(msg *gotgbot.Message) bool {
