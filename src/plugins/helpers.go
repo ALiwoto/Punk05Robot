@@ -99,7 +99,7 @@ func processJobs() error {
 						return false
 					}
 				}
-				logging.Errorf("Error while handling job %s: %v", key, err)
+				logging.Errorf("Error while handling job %d: %v", key, err)
 			}
 
 			handledJobs++
