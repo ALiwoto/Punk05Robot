@@ -1,4 +1,4 @@
-module github.com/AnimeKaizoku/RepostingRobot
+module github.com/AnimeKaizoku/Punk05Robot
 
 go 1.18
 

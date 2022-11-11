@@ -4,9 +4,9 @@ import (
 	"strconv"
 
 	"github.com/ALiwoto/mdparser/mdparser"
-	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
-	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
-	"github.com/AnimeKaizoku/RepostingRobot/src/database"
+	"github.com/AnimeKaizoku/Punk05Robot/src/core/wotoConfig"
+	wv "github.com/AnimeKaizoku/Punk05Robot/src/core/wotoValues"
+	"github.com/AnimeKaizoku/Punk05Robot/src/database"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"

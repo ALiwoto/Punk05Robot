@@ -3,12 +3,20 @@ package repostPlugin
 import (
 	"time"
 
-	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
+	wv "github.com/AnimeKaizoku/Punk05Robot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 )
+
+func getCaption(job *wv.PendingJob) string {
+	return ""
+}
+
+func getButtons(job *wv.PendingJob) *gotgbot.InlineKeyboardMarkup {
+	return nil
+}
 
 func isMediaMessage(msg *gotgbot.Message) bool {
 	switch {
@@ -63,10 +71,6 @@ func getFilesId(msg *gotgbot.Message) string {
 	}
 
 	return ""
-}
-
-func generateButtons() *gotgbot.InlineKeyboardMarkup {
-	return _defaultButtons
 }
 
 func generateKey() uint64 {

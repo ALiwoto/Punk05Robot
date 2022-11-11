@@ -3,9 +3,9 @@ package repostPlugin
 import (
 	"time"
 
-	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
-	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
-	"github.com/AnimeKaizoku/RepostingRobot/src/database"
+	"github.com/AnimeKaizoku/Punk05Robot/src/core/logging"
+	wv "github.com/AnimeKaizoku/Punk05Robot/src/core/wotoValues"
+	"github.com/AnimeKaizoku/Punk05Robot/src/database"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
@@ -77,7 +77,7 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	if shouldDeleteMessage {
 		_, err := ctx.EffectiveMessage.Delete(b)
 		if err != nil {
-			logging.Error("while deleteing: ", err)
+			logging.Error("while deleting: ", err)
 		}
 		shouldDeleteMessage = false
 	} else {
@@ -87,10 +87,19 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	job := &wv.PendingJob{
 		Bot:                 b,
 		Ctx:                 ctx,
+		Settings:            settings,
 		ShouldDeleteMessage: shouldDeleteMessage,
 		Handler:             handleRepost,
 		RegisteredTime:      time.Now(),
 		TimeDistance:        distance,
+	}
+
+	if settings.FooterText != "" || settings.RepostingMode == wv.RepostingModeWithOriginalContext {
+		job.CaptionGetter = getCaption
+	}
+
+	if !settings.ButtonsUniqueId.IsEmpty() {
+		job.ButtonGenerator = getButtons
 	}
 
 	if msg.MediaGroupId != "" {
@@ -126,7 +135,7 @@ func handleRepost(job *wv.PendingJob) error {
 	if job.ShouldDeleteMessage {
 		_, err := msg.Delete(job.Bot)
 		if err != nil {
-			logging.Error("while deleteing: ", err)
+			logging.Error("while deleting: ", err)
 		}
 		job.ShouldDeleteMessage = false
 	}
@@ -152,43 +161,43 @@ func handleRepost(job *wv.PendingJob) error {
 	//WhisperTypeDice
 	case len(msg.Photo) != 0:
 		_, err = bot.SendPhoto(chat.Id, msg.Photo[0].FileId, &gotgbot.SendPhotoOpts{
-			Caption:     theCaption,
-			ReplyMarkup: generateButtons(),
+			Caption:     job.GetPostCaption(),
+			ReplyMarkup: job.GenerateButtons(),
 		})
 	case msg.Video != nil:
 		_, err = bot.SendVideo(chat.Id, msg.Video.FileId, &gotgbot.SendVideoOpts{
-			Caption:     theCaption,
-			ReplyMarkup: generateButtons(),
+			Caption:     job.GetPostCaption(),
+			ReplyMarkup: job.GenerateButtons(),
 		})
 	case msg.Audio != nil:
 		_, err = bot.SendAudio(chat.Id, msg.Audio.FileId, &gotgbot.SendAudioOpts{
-			Caption:     theCaption,
-			ReplyMarkup: generateButtons(),
+			Caption:     job.GetPostCaption(),
+			ReplyMarkup: job.GenerateButtons(),
 		})
 	case msg.Voice != nil:
 		_, err = bot.SendVoice(chat.Id, msg.Voice.FileId, &gotgbot.SendVoiceOpts{
-			Caption:     theCaption,
-			ReplyMarkup: generateButtons(),
+			Caption:     job.GetPostCaption(),
+			ReplyMarkup: job.GenerateButtons(),
 		})
 	case msg.Sticker != nil:
 		_, err = bot.SendSticker(chat.Id, msg.Sticker.FileId, &gotgbot.SendStickerOpts{
 			//Caption: w.Text,
-			ReplyMarkup: generateButtons(),
+			ReplyMarkup: job.GenerateButtons(),
 		})
 	case msg.Document != nil:
 		_, err = bot.SendDocument(chat.Id, msg.Document.FileId, &gotgbot.SendDocumentOpts{
-			Caption:     theCaption,
-			ReplyMarkup: generateButtons(),
+			Caption:     job.GetPostCaption(),
+			ReplyMarkup: job.GenerateButtons(),
 		})
 	case msg.VideoNote != nil:
 		_, err = bot.SendVideoNote(chat.Id, msg.VideoNote.FileId, &gotgbot.SendVideoNoteOpts{
 			//Caption: w.Text,
-			ReplyMarkup: generateButtons(),
+			ReplyMarkup: job.GenerateButtons(),
 		})
 	case msg.Animation != nil:
 		_, err = bot.SendAnimation(chat.Id, msg.Animation.FileId, &gotgbot.SendAnimationOpts{
-			Caption:     theCaption,
-			ReplyMarkup: generateButtons(),
+			Caption:     job.GetPostCaption(),
+			ReplyMarkup: job.GenerateButtons(),
 		})
 	}
 

@@ -11,10 +11,15 @@ import (
 type PendingJob struct {
 	Bot                 *gotgbot.Bot
 	Ctx                 *ext.Context
+	Settings            *ChannelSettings
 	ShouldDeleteMessage bool
-	Handler             func(job *PendingJob) error
-	RegisteredTime      time.Time
-	TimeDistance        time.Duration
+
+	Handler         func(job *PendingJob) error
+	ButtonGenerator func(job *PendingJob) *gotgbot.InlineKeyboardMarkup
+	CaptionGetter   func(job *PendingJob) string
+
+	RegisteredTime time.Time
+	TimeDistance   time.Duration
 }
 
 type ChannelSettings struct {
@@ -28,6 +33,11 @@ type ChannelSettings struct {
 	// supposed to check for repeating post and remove them.
 	IgnoreRepeatChecker bool `json:"ignore_repeat_checker"`
 	IsTmpIgnoring       bool `json:"is_tmp_ignoring" sql:"-" gorm:"-"`
+	AllowUploadFromUrl  bool `json:"allow_upload_from_url"`
+	// RepostingMode is the mode applied to a channel by bot.
+	RepostingMode   ChannelRepostingMode `json:"channel_reposting_mode"`
+	FooterText      string               `json:"footer_text"`
+	ButtonsUniqueId ButtonsUniqueId      `json:"buttons_unique_id"`
 
 	AccessMap *ssg.SafeMap[int64, ChannelAccessElement] `json:"-" sql:"-" gorm:"-"`
 }
@@ -38,3 +48,6 @@ type ChannelAccessElement struct {
 	ChannelId      int64
 	AddedBy        int64
 }
+
+type ChannelRepostingMode int
+type ButtonsUniqueId string

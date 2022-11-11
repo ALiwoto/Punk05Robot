@@ -1,9 +1,9 @@
 package database
 
 import (
-	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
-	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
-	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
+	"github.com/AnimeKaizoku/Punk05Robot/src/core/logging"
+	"github.com/AnimeKaizoku/Punk05Robot/src/core/wotoConfig"
+	wv "github.com/AnimeKaizoku/Punk05Robot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -70,7 +70,7 @@ func LoadChannelsSettings() error {
 	}
 
 	if len(allSettings) != 0 {
-		channelsSettings.AddPointerList(settingskeyGetter, allSettings...)
+		channelsSettings.AddPointerList(settingsKeyGetter, allSettings...)
 	}
 
 	return nil
@@ -172,7 +172,7 @@ func IsChannelRegistered(id int64) bool {
 	return channelsSettings.Exists(id)
 }
 
-func settingskeyGetter(s *wv.ChannelSettings) int64 {
+func settingsKeyGetter(s *wv.ChannelSettings) int64 {
 	if s.AccessMap == nil {
 		s.AccessMap = ssg.NewSafeMap[int64, wv.ChannelAccessElement]()
 	}

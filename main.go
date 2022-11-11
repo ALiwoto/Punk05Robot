@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
-	"github.com/AnimeKaizoku/RepostingRobot/src/core/logging"
-	"github.com/AnimeKaizoku/RepostingRobot/src/core/wotoConfig"
-	"github.com/AnimeKaizoku/RepostingRobot/src/database"
-	"github.com/AnimeKaizoku/RepostingRobot/src/plugins"
+	"github.com/AnimeKaizoku/Punk05Robot/src/core/logging"
+	"github.com/AnimeKaizoku/Punk05Robot/src/core/wotoConfig"
+	"github.com/AnimeKaizoku/Punk05Robot/src/database"
+	"github.com/AnimeKaizoku/Punk05Robot/src/plugins"
 )
 
 func main() {

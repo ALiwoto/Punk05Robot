@@ -5,7 +5,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 )
 
-var _defaultButtons = &gotgbot.InlineKeyboardMarkup{
+var MoreContentButtons = &gotgbot.InlineKeyboardMarkup{
 	InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
 		{
 			{

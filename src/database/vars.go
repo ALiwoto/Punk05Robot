@@ -3,7 +3,7 @@ package database
 import (
 	"sync"
 
-	wv "github.com/AnimeKaizoku/RepostingRobot/src/core/wotoValues"
+	wv "github.com/AnimeKaizoku/Punk05Robot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/ssg/ssg"
 )
 
