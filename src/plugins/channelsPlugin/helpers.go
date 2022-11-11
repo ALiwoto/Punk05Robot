@@ -1,18 +1,18 @@
 package channelsPlugin
 
 import (
+	sHandlers "github.com/AnimeKaizoku/Punk05Robot/src/core/specialHandlers"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
-	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 )
 
 func LoadAllHandlers(d *ext.Dispatcher, t []rune) {
-	registerCommand := handlers.NewCommand(registerCmd, registerCommandResponse)
-	tmpIgnoreCommand := handlers.NewCommand(tmpIgnoreCmd, tmpIgnoreResponse)
-	addUserCommand := handlers.NewCommand(addUserCmd, addUserResponse)
-	setFooterCommand := handlers.NewCommand(setFooterCmd, setFooterResponse)
-	setButtonsCommand := handlers.NewCommand(setButtonsCmd, setButtonsResponse)
-	addButtonsCommand := handlers.NewCommand(addButtonsCmd, addButtonsResponse)
-	removeButtonsCommand := handlers.NewCommand(removeButtonsCmd, removeButtonsResponse)
+	registerCommand := sHandlers.SudoOnlyCommand(registerCmd, registerCommandResponse)
+	tmpIgnoreCommand := sHandlers.SudoOnlyCommand(tmpIgnoreCmd, tmpIgnoreResponse)
+	addUserCommand := sHandlers.SudoOnlyCommand(addUserCmd, addUserResponse)
+	setFooterCommand := sHandlers.SudoOnlyCommand(setFooterCmd, setFooterResponse)
+	setButtonsCommand := sHandlers.SudoOnlyCommand(setButtonsCmd, setButtonsResponse)
+	addButtonsCommand := sHandlers.SudoOnlyCommand(addButtonsCmd, addButtonsResponse)
+	removeButtonsCommand := sHandlers.SudoOnlyCommand(removeButtonsCmd, removeButtonsResponse)
 
 	registerCommand.Triggers = t
 	tmpIgnoreCommand.Triggers = t

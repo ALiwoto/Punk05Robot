@@ -4,7 +4,6 @@ import (
 	"strconv"
 
 	"github.com/ALiwoto/mdparser/mdparser"
-	"github.com/AnimeKaizoku/Punk05Robot/src/core/wotoConfig"
 	wv "github.com/AnimeKaizoku/Punk05Robot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/Punk05Robot/src/database"
 	"github.com/AnimeKaizoku/ssg/ssg"
@@ -15,9 +14,6 @@ import (
 func registerCommandResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	user := ctx.EffectiveUser
 	msg := ctx.EffectiveMessage
-	if !wotoConfig.IsSudoUser(user.Id) {
-		return ext.ContinueGroups
-	}
 
 	myStrs := ssg.Split(msg.Text, " ", "\n")
 	if len(myStrs) < 2 {
@@ -65,11 +61,7 @@ func registerCommandResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func tmpIgnoreResponse(b *gotgbot.Bot, ctx *ext.Context) error {
-	user := ctx.EffectiveUser
 	msg := ctx.EffectiveMessage
-	if !wotoConfig.IsSudoUser(user.Id) {
-		return ext.ContinueGroups
-	}
 
 	myStrs := ssg.Split(msg.Text, " ", "\n")
 	if len(myStrs) < 2 {
@@ -123,13 +115,146 @@ func addUserResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func setFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
-	//TODO
-	return nil
+	message := ctx.EffectiveMessage
+	targetString := ""
+	idStr := ""
+	var channelId int64
+
+	if message.ReplyToMessage != nil {
+		targetString = message.ReplyToMessage.Text
+		myStrs := ctx.Args()
+		if len(myStrs) < 2 {
+			txt := mdparser.GetNormal("Usage: ")
+			txt.AppendMono("/setFooter -100123456 TEXT HERE (or reply)")
+			_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+				ParseMode: gotgbot.ParseModeMarkdownV2,
+			})
+			return ext.EndGroups
+		}
+
+		idStr = myStrs[1]
+	} else {
+		// /setFooter ID TEXT
+		// 0: /setFooter
+		// 1: The channel ID
+		// 2: rest (which is text)
+		myStrs := ssg.SplitN(message.Text, 3, " ")
+		if len(myStrs) < 3 {
+			txt := mdparser.GetNormal("Usage: ")
+			txt.AppendMono("/setFooter -100123456 TEXT HERE (or reply)")
+			_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+				ParseMode: gotgbot.ParseModeMarkdownV2,
+			})
+			return ext.EndGroups
+		}
+		idStr = myStrs[1]
+		targetString = myStrs[2]
+	}
+
+	channelId = ssg.ToInt64(idStr)
+	if channelId >= 0 {
+		txt := mdparser.GetNormal("Usage: ")
+		txt.Mono("\t\t/setFooter -100123456 TEXT HERE\n")
+		txt.Bold("Please make sure you have entered a correct channel ID.\n")
+		txt.Normal("Channel IDs should always start with -100.")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings := database.GetChannelSettings(channelId)
+	if settings == nil {
+		txt := mdparser.GetBold("Looks like this channel's settings doesn't exist in my database.\n")
+		txt.Normal("You have to register the channel using:\n")
+		txt.Mono("\t\t/register CHANNEL_ID (e.g. -10012345678)")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings.FooterText = targetString
+	database.SaveChannelSettings(settings, false)
+
+	return ext.EndGroups
 }
 
 func setButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
-	//TODO
+	message := ctx.EffectiveMessage
+	targetString := ""
+	idStr := ""
+	var channelId int64
+
+	if message.ReplyToMessage != nil {
+		targetString = message.ReplyToMessage.Text
+		myStrs := ctx.Args()
+		if len(myStrs) < 2 {
+			txt := mdparser.GetNormal("Usage: ")
+			txt.AppendMono("/setButtons -100123456 TEXT HERE (or reply)")
+			_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+				ParseMode: gotgbot.ParseModeMarkdownV2,
+			})
+			return ext.EndGroups
+		}
+
+		idStr = myStrs[1]
+	} else {
+		// /setFooter ID TEXT
+		// 0: /setFooter
+		// 1: The channel ID
+		// 2: rest (which is text)
+		myStrs := ssg.SplitN(message.Text, 3, " ")
+		if len(myStrs) < 3 {
+			txt := mdparser.GetNormal("Usage: ")
+			txt.AppendMono("/setButtons -100123456 TEXT HERE (or reply)")
+			_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+				ParseMode: gotgbot.ParseModeMarkdownV2,
+			})
+			return ext.EndGroups
+		}
+		idStr = myStrs[1]
+		targetString = myStrs[2]
+	}
+
+	channelId = ssg.ToInt64(idStr)
+	if channelId >= 0 {
+		txt := mdparser.GetNormal("Usage: ")
+		txt.Mono("\t\t/setButtons -100123456 TEXT HERE\n")
+		txt.Bold("Please make sure you have entered a correct channel ID.\n")
+		txt.Normal("Channel IDs should always start with -100.")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings := database.GetChannelSettings(channelId)
+	if settings == nil {
+		txt := mdparser.GetBold("Looks like this channel's settings doesn't exist in my database.\n")
+		txt.Normal("You have to register the channel using:\n")
+		txt.Mono("\t\t/register CHANNEL_ID (e.g. -10012345678)")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	if !wv.IsValidButtonsUniqueId(targetString) {
+		// TODO: parse buttons from user input here and allow
+		// using custom buttons to the user.
+		txt := mdparser.GetBold("Using custom buttons are not supported yet.")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings.ButtonsUniqueId = wv.ButtonsUniqueId(targetString)
+	database.SaveChannelSettings(settings, false)
+
 	return nil
+
 }
 
 func addButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
