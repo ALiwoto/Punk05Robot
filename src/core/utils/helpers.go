@@ -25,9 +25,7 @@ func GetIdFromToken(token string) int64 {
 }
 
 func SendAlert(b *gotgbot.Bot, m *gotgbot.Message, md mdparser.WMarkDown) error {
-	str := md.ToString()
-	str = strings.ReplaceAll(str, b.Token, "")
-	_, err := m.Reply(b, str, &gotgbot.SendMessageOpts{ParseMode: MarkDownV2})
+	_, err := m.Reply(b, md.ToString(), &gotgbot.SendMessageOpts{ParseMode: MarkDownV2})
 	if err != nil {
 		log.Println(err)
 	}

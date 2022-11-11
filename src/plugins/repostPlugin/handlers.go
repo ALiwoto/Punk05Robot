@@ -26,14 +26,14 @@ func chatMemberResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	if !database.IsChannelRegistered(ctx.MyChatMember.Chat.Id) {
-		_, _ = b.LeaveChat(ctx.MyChatMember.Chat.Id)
+		_, _ = b.LeaveChat(ctx.MyChatMember.Chat.Id, nil)
 	}
 	return nil
 }
 
 func repostMessageFilter(msg *gotgbot.Message) bool {
 	if !database.IsChannelRegistered(msg.Chat.Id) {
-		_, _ = wv.HelperBot.LeaveChat(msg.Chat.Id)
+		_, _ = wv.HelperBot.LeaveChat(msg.Chat.Id, nil)
 		return false
 	}
 
@@ -75,7 +75,7 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	if shouldDeleteMessage {
-		_, err := ctx.EffectiveMessage.Delete(b)
+		_, err := ctx.EffectiveMessage.Delete(b, nil)
 		if err != nil {
 			logging.Error("while deleting: ", err)
 		}
@@ -133,7 +133,7 @@ func addJobToMediaGroupMessagesMap(id int64, j *wv.PendingJob) {
 func handleRepost(job *wv.PendingJob) error {
 	msg := job.Ctx.EffectiveMessage
 	if job.ShouldDeleteMessage {
-		_, err := msg.Delete(job.Bot)
+		_, err := msg.Delete(job.Bot, nil)
 		if err != nil {
 			logging.Error("while deleting: ", err)
 		}

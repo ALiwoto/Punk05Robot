@@ -23,16 +23,17 @@ func StartTelegramBot() error {
 	}
 
 	b, err := gotgbot.NewBot(token, &gotgbot.BotOpts{
-		Client:      http.Client{},
-		GetTimeout:  gotgbot.DefaultGetTimeout,
-		PostTimeout: gotgbot.DefaultPostTimeout,
+		Client: http.Client{},
+		DefaultRequestOpts: &gotgbot.RequestOpts{
+			Timeout: 6 * gotgbot.DefaultTimeout,
+		},
 	})
 	if err != nil {
 		return err
 	}
 
-	utmp := ext.NewUpdater(nil)
-	updater := &utmp
+	uTmp := ext.NewUpdater(nil)
+	updater := &uTmp
 	err = updater.StartPolling(b, &ext.PollingOpts{
 		DropPendingUpdates: wotoConfig.DropUpdates(),
 	})
@@ -47,10 +48,10 @@ func StartTelegramBot() error {
 
 	LoadAllHandlers(updater.Dispatcher, wotoConfig.GetCmdPrefixes())
 
-	return proccessJobs()
+	return processJobs()
 }
 
-func proccessJobs() error {
+func processJobs() error {
 	var handledJobs int
 	var longHandledJobs int
 	var err error
