@@ -124,8 +124,8 @@ func setFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		targetString = message.ReplyToMessage.Text
 		myStrs := ctx.Args()
 		if len(myStrs) < 2 {
-			txt := mdparser.GetNormal("Usage: ")
-			txt.Mono("/setFooter -100123456 TEXT HERE (or reply)")
+			txt := mdparser.GetBold("Usage: \n")
+			txt.Mono("\t\t/setFooter -100123456 TEXT HERE (or reply)")
 			_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
 				ParseMode: gotgbot.ParseModeMarkdownV2,
 			})
