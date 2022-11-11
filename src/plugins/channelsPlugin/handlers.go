@@ -118,5 +118,26 @@ func tmpIgnoreResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func addUserResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	//TODO
+	return nil
+}
+
+func setFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	//TODO
+	return nil
+}
+
+func setButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	//TODO
+	return nil
+}
+
+func addButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	//TODO
+	return nil
+}
+
+func removeButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	//TODO
 	return nil
 }

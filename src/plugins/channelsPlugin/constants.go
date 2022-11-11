@@ -1,7 +1,11 @@
 package channelsPlugin
 
 const (
-	registerCmd  = "register"
-	tmpIgnoreCmd = "tmpignore"
-	addUserCmd   = "adduser"
+	registerCmd      = "register"
+	tmpIgnoreCmd     = "tmpIgnore"
+	addUserCmd       = "addUser"
+	setFooterCmd     = "setFooter"
+	setButtonsCmd    = "setButtons"
+	addButtonsCmd    = "addButtons"
+	removeButtonsCmd = "removeButtons"
 )
