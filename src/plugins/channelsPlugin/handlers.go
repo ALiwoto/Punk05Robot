@@ -266,3 +266,23 @@ func removeButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	//TODO
 	return nil
 }
+
+func allowFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	//TODO
+	return nil
+}
+
+func disallowFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	//TODO
+	return nil
+}
+
+func allowButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	//TODO
+	return nil
+}
+
+func disallowButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	//TODO
+	return nil
+}

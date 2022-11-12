@@ -13,6 +13,10 @@ func LoadAllHandlers(d *ext.Dispatcher, t []rune) {
 	setButtonsCommand := sHandlers.SudoOnlyCommand(setButtonsCmd, setButtonsResponse)
 	addButtonsCommand := sHandlers.SudoOnlyCommand(addButtonsCmd, addButtonsResponse)
 	removeButtonsCommand := sHandlers.SudoOnlyCommand(removeButtonsCmd, removeButtonsResponse)
+	allowFooterCommand := sHandlers.SudoOnlyCommand(allowFooterCmd, allowFooterResponse)
+	disallowFooterCommand := sHandlers.SudoOnlyCommand(disallowFooterCmd, disallowFooterResponse)
+	allowButtonsCommand := sHandlers.SudoOnlyCommand(allowButtonsCmd, allowButtonsResponse)
+	disallowButtonsCommand := sHandlers.SudoOnlyCommand(disallowButtonsCmd, disallowButtonsResponse)
 
 	registerCommand.Triggers = t
 	tmpIgnoreCommand.Triggers = t
@@ -21,6 +25,10 @@ func LoadAllHandlers(d *ext.Dispatcher, t []rune) {
 	setButtonsCommand.Triggers = t
 	addButtonsCommand.Triggers = t
 	removeButtonsCommand.Triggers = t
+	allowFooterCommand.Triggers = t
+	disallowFooterCommand.Triggers = t
+	allowButtonsCommand.Triggers = t
+	disallowButtonsCommand.Triggers = t
 
 	d.AddHandler(registerCommand)
 	d.AddHandler(tmpIgnoreCommand)
@@ -29,4 +37,8 @@ func LoadAllHandlers(d *ext.Dispatcher, t []rune) {
 	d.AddHandler(setButtonsCommand)
 	d.AddHandler(addButtonsCommand)
 	d.AddHandler(removeButtonsCommand)
+	d.AddHandler(allowFooterCommand)
+	d.AddHandler(disallowFooterCommand)
+	d.AddHandler(allowButtonsCommand)
+	d.AddHandler(disallowButtonsCommand)
 }

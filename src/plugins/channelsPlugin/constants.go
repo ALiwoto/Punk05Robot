@@ -9,3 +9,10 @@ const (
 	addButtonsCmd    = "addButtons"
 	removeButtonsCmd = "removeButtons"
 )
+
+const (
+	allowFooterCmd     = "allowFooter"
+	disallowFooterCmd  = "disallowFooter"
+	allowButtonsCmd    = "allowButtons"
+	disallowButtonsCmd = "disallowButtons"
+)
