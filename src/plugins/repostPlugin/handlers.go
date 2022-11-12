@@ -167,21 +167,25 @@ func handleRepost(job *wv.PendingJob) error {
 		_, err = bot.SendPhoto(chat.Id, msg.Photo[0].FileId, &gotgbot.SendPhotoOpts{
 			Caption:     job.GetPostCaption(),
 			ReplyMarkup: job.GenerateButtons(),
+			ParseMode:   gotgbot.ParseModeMarkdownV2,
 		})
 	case msg.Video != nil:
 		_, err = bot.SendVideo(chat.Id, msg.Video.FileId, &gotgbot.SendVideoOpts{
 			Caption:     job.GetPostCaption(),
 			ReplyMarkup: job.GenerateButtons(),
+			ParseMode:   gotgbot.ParseModeMarkdownV2,
 		})
 	case msg.Audio != nil:
 		_, err = bot.SendAudio(chat.Id, msg.Audio.FileId, &gotgbot.SendAudioOpts{
 			Caption:     job.GetPostCaption(),
 			ReplyMarkup: job.GenerateButtons(),
+			ParseMode:   gotgbot.ParseModeMarkdownV2,
 		})
 	case msg.Voice != nil:
 		_, err = bot.SendVoice(chat.Id, msg.Voice.FileId, &gotgbot.SendVoiceOpts{
 			Caption:     job.GetPostCaption(),
 			ReplyMarkup: job.GenerateButtons(),
+			ParseMode:   gotgbot.ParseModeMarkdownV2,
 		})
 	case msg.Sticker != nil:
 		_, err = bot.SendSticker(chat.Id, msg.Sticker.FileId, &gotgbot.SendStickerOpts{
@@ -192,6 +196,7 @@ func handleRepost(job *wv.PendingJob) error {
 		_, err = bot.SendDocument(chat.Id, msg.Document.FileId, &gotgbot.SendDocumentOpts{
 			Caption:     job.GetPostCaption(),
 			ReplyMarkup: job.GenerateButtons(),
+			ParseMode:   gotgbot.ParseModeMarkdownV2,
 		})
 	case msg.VideoNote != nil:
 		_, err = bot.SendVideoNote(chat.Id, msg.VideoNote.FileId, &gotgbot.SendVideoNoteOpts{
@@ -202,6 +207,7 @@ func handleRepost(job *wv.PendingJob) error {
 		_, err = bot.SendAnimation(chat.Id, msg.Animation.FileId, &gotgbot.SendAnimationOpts{
 			Caption:     job.GetPostCaption(),
 			ReplyMarkup: job.GenerateButtons(),
+			ParseMode:   gotgbot.ParseModeMarkdownV2,
 		})
 	}
 
