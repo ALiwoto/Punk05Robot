@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/ALiwoto/mdparser/mdparser"
+	"github.com/AnimeKaizoku/Punk05Robot/src/core/utils"
 	wv "github.com/AnimeKaizoku/Punk05Robot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -61,7 +62,7 @@ func isMediaMessage(msg *gotgbot.Message) bool {
 		return true
 	}
 
-	return false
+	return msg.Text != "" && utils.IsSupportedUploadingUrl(msg.Text)
 }
 
 func getFilesId(msg *gotgbot.Message) string {

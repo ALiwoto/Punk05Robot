@@ -13,6 +13,17 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
 
+func IsSupportedUploadingUrl(value string) bool {
+	value = strings.ReplaceAll(strings.ReplaceAll(strings.ToLower(value), "https://", ""), "http://", "")
+	for current := range SupportedUploadingUrl {
+		if strings.HasPrefix(value, current) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func GetTwitterPhotoUrls(postLink string) (*MediaUrlInfo, error) {
 	myUrl, err := url.Parse(postLink)
 	if err != nil {
