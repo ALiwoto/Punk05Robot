@@ -53,6 +53,8 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	settings := database.GetChannelSettings(chat.Id)
 	if settings.IsTmpIgnoring {
 		return ext.ContinueGroups
+	} else if msg.Text != "" && !settings.AllowUploadFromUrl {
+		return ext.ContinueGroups
 	}
 
 	if msg.MediaGroupId != "" {

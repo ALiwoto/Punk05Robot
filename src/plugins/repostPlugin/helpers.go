@@ -43,6 +43,10 @@ func getButtons(job *wv.PendingJob) *gotgbot.InlineKeyboardMarkup {
 }
 
 func isMediaMessage(msg *gotgbot.Message) bool {
+	if msg.Text != "" && utils.IsSupportedUploadingUrl(msg.Text) {
+		return true
+	}
+
 	switch {
 	case len(msg.Photo) > 0:
 		return true
@@ -62,7 +66,7 @@ func isMediaMessage(msg *gotgbot.Message) bool {
 		return true
 	}
 
-	return msg.Text != "" && utils.IsSupportedUploadingUrl(msg.Text)
+	return false
 }
 
 func getFilesId(msg *gotgbot.Message) string {
