@@ -41,14 +41,14 @@ func GetTwitterPhotoUrls(postLink string) (*MediaUrlInfo, error) {
 		return nil, err
 	}
 
-	profile, err := TwitterClient.GetProfile(theTwit.Username)
-	if err != nil {
-		return nil, err
-	}
+	// profile, err := TwitterClient.GetProfile(theTwit.Username)
+	// if err != nil {
+	// return nil, err
+	// }
 
 	return &MediaUrlInfo{
 		Urls:  theTwit.Photos,
-		Owner: profile.Name,
+		Owner: theTwit.Username,
 	}, nil
 }
 
