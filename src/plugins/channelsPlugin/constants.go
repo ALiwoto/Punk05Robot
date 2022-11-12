@@ -13,6 +13,8 @@ const (
 const (
 	allowFooterCmd     = "allowFooter"
 	disallowFooterCmd  = "disallowFooter"
+	allowCaptionCmd    = "allowCaption"
+	disallowCaptionCmd = "disallowFooter"
 	allowButtonsCmd    = "allowButtons"
 	disallowButtonsCmd = "disallowButtons"
 )

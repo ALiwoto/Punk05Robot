@@ -15,8 +15,8 @@ func LoadAllHandlers(d *ext.Dispatcher, t []rune) {
 	removeButtonsCommand := sHandlers.SudoOnlyCommand(removeButtonsCmd, removeButtonsResponse)
 	allowFooterCommand := sHandlers.SudoOnlyCommand(allowFooterCmd, allowFooterResponse)
 	disallowFooterCommand := sHandlers.SudoOnlyCommand(disallowFooterCmd, disallowFooterResponse)
-	allowCaptionCommand := sHandlers.SudoOnlyCommand(allowFooterCmd, allowCaptionResponse)
-	disallowCaptionCommand := sHandlers.SudoOnlyCommand(disallowFooterCmd, disallowCaptionResponse)
+	allowCaptionCommand := sHandlers.SudoOnlyCommand(allowCaptionCmd, allowCaptionResponse)
+	disallowCaptionCommand := sHandlers.SudoOnlyCommand(disallowCaptionCmd, disallowCaptionResponse)
 	allowButtonsCommand := sHandlers.SudoOnlyCommand(allowButtonsCmd, allowButtonsResponse)
 	disallowButtonsCommand := sHandlers.SudoOnlyCommand(disallowButtonsCmd, disallowButtonsResponse)
 
