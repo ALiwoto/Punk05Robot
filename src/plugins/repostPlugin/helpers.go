@@ -29,6 +29,10 @@ func getCaption(job *wv.PendingJob) string {
 		mdparser.GetNormal("MORE_CONTENTS"),
 		wv.MoreContentsMd,
 	)
+	md.ReplaceMdThis(
+		mdparser.GetNormal("MORE_CONTENT"),
+		wv.MoreContentsMd,
+	)
 	return md.ToString()
 }
 
