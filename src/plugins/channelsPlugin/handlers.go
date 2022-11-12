@@ -309,6 +309,12 @@ func allowFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.EndGroups
 	}
 
+	if settings.AllowFooterText {
+		_, _ = message.Reply(b, mdparser.GetNormal("No new settings to be updated!").ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
 	settings.AllowFooterText = true
 	database.SaveChannelSettings(settings, false)
 
@@ -361,6 +367,12 @@ func disallowFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.EndGroups
 	}
 
+	if !settings.AllowFooterText {
+		_, _ = message.Reply(b, mdparser.GetNormal("No new settings to be updated!").ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
 	settings.AllowFooterText = false
 	database.SaveChannelSettings(settings, false)
 
@@ -413,6 +425,12 @@ func allowCaptionResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.EndGroups
 	}
 
+	if settings.AllowCaption {
+		_, _ = message.Reply(b, mdparser.GetNormal("No new settings to be updated!").ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
 	settings.AllowCaption = true
 	database.SaveChannelSettings(settings, false)
 
@@ -465,6 +483,12 @@ func disallowCaptionResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.EndGroups
 	}
 
+	if !settings.AllowCaption {
+		_, _ = message.Reply(b, mdparser.GetNormal("No new settings to be updated!").ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
 	settings.AllowCaption = false
 	database.SaveChannelSettings(settings, false)
 
@@ -517,6 +541,12 @@ func allowButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.EndGroups
 	}
 
+	if settings.AllowButtons {
+		_, _ = message.Reply(b, mdparser.GetNormal("No new settings to be updated!").ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
 	settings.AllowButtons = true
 	database.SaveChannelSettings(settings, false)
 
@@ -569,6 +599,12 @@ func disallowButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.EndGroups
 	}
 
+	if !settings.AllowButtons {
+		_, _ = message.Reply(b, mdparser.GetNormal("No new settings to be updated!").ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
 	settings.AllowButtons = false
 	database.SaveChannelSettings(settings, false)
 
