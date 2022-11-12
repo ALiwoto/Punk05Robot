@@ -10,7 +10,7 @@ func (j *PendingJob) ShouldBeHandled() bool {
 	return j.TimeDistance == 0 || time.Since(j.RegisteredTime) >= j.TimeDistance
 }
 
-func (j *PendingJob) GenerateButtons() *gotgbot.InlineKeyboardMarkup {
+func (j *PendingJob) GenerateButtons() gotgbot.ReplyMarkup {
 	if j.ButtonGenerator == nil {
 		return nil
 	}
