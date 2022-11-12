@@ -177,6 +177,9 @@ func setFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	settings.FooterText = targetString
 	database.SaveChannelSettings(settings, false)
 
+	_, _ = message.Reply(b, mdparser.GetBold("Channel settings updated!").ToString(), &gotgbot.SendMessageOpts{
+		ParseMode: gotgbot.ParseModeMarkdownV2,
+	})
 	return ext.EndGroups
 }
 
@@ -253,6 +256,9 @@ func setButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	settings.ButtonsUniqueId = wv.ButtonsUniqueId(targetString)
 	database.SaveChannelSettings(settings, false)
 
+	_, _ = message.Reply(b, mdparser.GetBold("Channel settings updated!").ToString(), &gotgbot.SendMessageOpts{
+		ParseMode: gotgbot.ParseModeMarkdownV2,
+	})
 	return nil
 
 }
