@@ -620,3 +620,119 @@ func disallowButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	return ext.EndGroups
 }
+
+func allowUrlResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	message := ctx.EffectiveMessage
+	idStr := ""
+	var channelId int64
+
+	// /allowUrl ID TEXT
+	// 0: /allowUrl
+	// 1: The channel ID
+	myStrs := ctx.Args()
+	if len(myStrs) < 2 {
+		txt := mdparser.GetNormal("Usage: ")
+		txt.Mono("/allowUrl -100123456")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+	idStr = myStrs[1]
+
+	channelId = ssg.ToInt64(idStr)
+	if channelId >= 0 {
+		txt := mdparser.GetNormal("Usage: ")
+		txt.Mono("\t\t/allowUrl -100123456\n")
+		txt.Bold("Please make sure you have entered a correct channel ID.\n")
+		txt.Normal("Channel IDs should always start with -100.")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings := database.GetChannelSettings(channelId)
+	if settings == nil {
+		txt := mdparser.GetBold("Looks like this channel's settings doesn't exist in my database.\n")
+		txt.Normal("You have to register the channel using:\n")
+		txt.Mono("\t\t/register CHANNEL_ID (e.g. -10012345678)")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	if settings.AllowUploadFromUrl {
+		_, _ = message.Reply(b, mdparser.GetNormal("No new settings to be updated!").ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+	settings.AllowUploadFromUrl = true
+	database.SaveChannelSettings(settings, false)
+
+	_, _ = message.Reply(b, mdparser.GetBold("Channel settings updated!").ToString(), &gotgbot.SendMessageOpts{
+		ParseMode: gotgbot.ParseModeMarkdownV2,
+	})
+
+	return ext.EndGroups
+}
+
+func disallowUrlResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	message := ctx.EffectiveMessage
+	idStr := ""
+	var channelId int64
+
+	// /disallowUrl ID TEXT
+	// 0: /disallowUrl
+	// 1: The channel ID
+	myStrs := ctx.Args()
+	if len(myStrs) < 2 {
+		txt := mdparser.GetNormal("Usage: ")
+		txt.Mono("/disallowUrl -100123456")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+	idStr = myStrs[1]
+
+	channelId = ssg.ToInt64(idStr)
+	if channelId >= 0 {
+		txt := mdparser.GetNormal("Usage: ")
+		txt.Mono("\t\t/disallowUrl -100123456\n")
+		txt.Bold("Please make sure you have entered a correct channel ID.\n")
+		txt.Normal("Channel IDs should always start with -100.")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings := database.GetChannelSettings(channelId)
+	if settings == nil {
+		txt := mdparser.GetBold("Looks like this channel's settings doesn't exist in my database.\n")
+		txt.Normal("You have to register the channel using:\n")
+		txt.Mono("\t\t/register CHANNEL_ID (e.g. -10012345678)")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	if !settings.AllowUploadFromUrl {
+		_, _ = message.Reply(b, mdparser.GetNormal("No new settings to be updated!").ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+	settings.AllowUploadFromUrl = false
+	database.SaveChannelSettings(settings, false)
+
+	_, _ = message.Reply(b, mdparser.GetBold("Channel settings updated!").ToString(), &gotgbot.SendMessageOpts{
+		ParseMode: gotgbot.ParseModeMarkdownV2,
+	})
+
+	return ext.EndGroups
+}

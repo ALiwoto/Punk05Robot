@@ -17,4 +17,6 @@ const (
 	disallowCaptionCmd = "disallowFooter"
 	allowButtonsCmd    = "allowButtons"
 	disallowButtonsCmd = "disallowButtons"
+	allowUrlCmd        = "allowUrl"
+	disallowUrlCmd     = "disallowUrl"
 )
