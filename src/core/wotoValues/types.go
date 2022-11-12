@@ -12,6 +12,8 @@ type PendingJob struct {
 	Bot                 *gotgbot.Bot
 	Ctx                 *ext.Context
 	Settings            *ChannelSettings
+	MediaOnCaptionName  string
+	MediaOnCaptionUrl   string
 	ShouldDeleteMessage bool
 	IsUrlUpload         bool
 

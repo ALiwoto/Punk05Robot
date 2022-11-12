@@ -34,6 +34,10 @@ func getCaption(job *wv.PendingJob) string {
 		mdparser.GetNormal("MORE_CONTENT"),
 		wv.MoreContentsMd,
 	)
+
+	if job.MediaOnCaptionName != "" && job.MediaOnCaptionUrl != "" {
+		md = mdparser.GetHyperLink(job.MediaOnCaptionName, job.MediaOnCaptionUrl).Normal("\n\n").AppendThis(md)
+	}
 	return md.ToString()
 }
 
