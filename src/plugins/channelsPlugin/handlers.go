@@ -371,6 +371,110 @@ func disallowFooterResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	return ext.EndGroups
 }
 
+func allowCaptionResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	message := ctx.EffectiveMessage
+	idStr := ""
+	var channelId int64
+
+	// /allowCaption ID
+	// 0: /allowCaption
+	// 1: The channel ID
+	myStrs := ctx.Args()
+	if len(myStrs) < 2 {
+		txt := mdparser.GetNormal("Usage: ")
+		txt.Mono("/allowCaption -100123456")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+	idStr = myStrs[1]
+
+	channelId = ssg.ToInt64(idStr)
+	if channelId >= 0 {
+		txt := mdparser.GetNormal("Usage: ")
+		txt.Mono("\t\t/allowCaption -100123456\n")
+		txt.Bold("Please make sure you have entered a correct channel ID.\n")
+		txt.Normal("Channel IDs should always start with -100.")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings := database.GetChannelSettings(channelId)
+	if settings == nil {
+		txt := mdparser.GetBold("Looks like this channel's settings doesn't exist in my database.\n")
+		txt.Normal("You have to register the channel using:\n")
+		txt.Mono("\t\t/register CHANNEL_ID (e.g. -10012345678)")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings.AllowCaption = true
+	database.SaveChannelSettings(settings, false)
+
+	_, _ = message.Reply(b, mdparser.GetBold("Channel settings updated!").ToString(), &gotgbot.SendMessageOpts{
+		ParseMode: gotgbot.ParseModeMarkdownV2,
+	})
+
+	return ext.EndGroups
+}
+
+func disallowCaptionResponse(b *gotgbot.Bot, ctx *ext.Context) error {
+	message := ctx.EffectiveMessage
+	idStr := ""
+	var channelId int64
+
+	// /disallowCaption ID
+	// 0: /disallowCaption
+	// 1: The channel ID
+	myStrs := ctx.Args()
+	if len(myStrs) < 2 {
+		txt := mdparser.GetNormal("Usage: ")
+		txt.Mono("/disallowCaption -100123456")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+	idStr = myStrs[1]
+
+	channelId = ssg.ToInt64(idStr)
+	if channelId >= 0 {
+		txt := mdparser.GetNormal("Usage: ")
+		txt.Mono("\t\t/disallowCaption -100123456\n")
+		txt.Bold("Please make sure you have entered a correct channel ID.\n")
+		txt.Normal("Channel IDs should always start with -100.")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings := database.GetChannelSettings(channelId)
+	if settings == nil {
+		txt := mdparser.GetBold("Looks like this channel's settings doesn't exist in my database.\n")
+		txt.Normal("You have to register the channel using:\n")
+		txt.Mono("\t\t/register CHANNEL_ID (e.g. -10012345678)")
+		_, _ = message.Reply(b, txt.ToString(), &gotgbot.SendMessageOpts{
+			ParseMode: gotgbot.ParseModeMarkdownV2,
+		})
+		return ext.EndGroups
+	}
+
+	settings.AllowCaption = false
+	database.SaveChannelSettings(settings, false)
+
+	_, _ = message.Reply(b, mdparser.GetBold("Channel settings updated!").ToString(), &gotgbot.SendMessageOpts{
+		ParseMode: gotgbot.ParseModeMarkdownV2,
+	})
+
+	return ext.EndGroups
+}
+
 func allowButtonsResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 	message := ctx.EffectiveMessage
 	idStr := ""
