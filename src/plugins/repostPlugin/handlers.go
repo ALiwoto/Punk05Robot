@@ -94,12 +94,16 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		TimeDistance:        distance,
 	}
 
-	if settings.FooterText != "" || settings.RepostingMode == wv.RepostingModeWithOriginalContext {
-		job.CaptionGetter = getCaption
+	if settings.AllowCaption && settings.AllowFooterText {
+		if settings.FooterText != "" || settings.RepostingMode == wv.RepostingModeWithOriginalContext {
+			job.CaptionGetter = getCaption
+		}
 	}
 
-	if !settings.ButtonsUniqueId.IsEmpty() {
-		job.ButtonGenerator = getButtons
+	if settings.AllowButtons {
+		if !settings.ButtonsUniqueId.IsEmpty() {
+			job.ButtonGenerator = getButtons
+		}
 	}
 
 	if msg.MediaGroupId != "" {
