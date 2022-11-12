@@ -18,6 +18,14 @@ func getCaption(job *wv.PendingJob) string {
 		mdparser.GetNormal("@"+job.Ctx.EffectiveChat.Username),
 	)
 	md.ReplaceMdThis(
+		mdparser.GetNormal("CHANNEL_TITLE"),
+		mdparser.GetNormal(job.Ctx.EffectiveChat.Title),
+	)
+	md.ReplaceMdThis(
+		mdparser.GetNormal("CHANNEL_ID"),
+		mdparser.GetNormal(ssg.ToBase10(job.Ctx.EffectiveChat.Id)),
+	)
+	md.ReplaceMdThis(
 		mdparser.GetNormal("MORE_CONTENTS"),
 		wv.MoreContentsMd,
 	)
