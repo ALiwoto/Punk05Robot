@@ -13,6 +13,7 @@ type PendingJob struct {
 	Ctx                 *ext.Context
 	Settings            *ChannelSettings
 	ShouldDeleteMessage bool
+	IsUrlUpload         bool
 
 	Handler         func(job *PendingJob) error
 	ButtonGenerator func(job *PendingJob) *gotgbot.InlineKeyboardMarkup
