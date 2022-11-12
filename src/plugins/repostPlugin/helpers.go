@@ -13,11 +13,11 @@ import (
 
 func getCaption(job *wv.PendingJob) string {
 	md := mdparser.GetNormal(job.Settings.FooterText)
-	md.ReplaceMd(
+	md.ReplaceMdThis(
 		mdparser.GetNormal("CHANNEL_USERNAME"),
 		mdparser.GetNormal("@"+job.Ctx.EffectiveChat.Username),
 	)
-	md.ReplaceMd(
+	md.ReplaceMdThis(
 		mdparser.GetNormal("MORE_CONTENTS"),
 		wv.MoreContentsMd,
 	)
