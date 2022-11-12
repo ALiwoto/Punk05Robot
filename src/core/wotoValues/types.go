@@ -22,6 +22,7 @@ type PendingJob struct {
 	TimeDistance   time.Duration
 }
 
+// ChannelSettings struct contains information about settings of a registered channel.
 type ChannelSettings struct {
 	// ChannelId is the channel id.
 	ChannelId int64 `json:"unique_id" gorm:"primaryKey"`

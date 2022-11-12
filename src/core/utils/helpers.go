@@ -2,6 +2,7 @@ package utils
 
 import (
 	"log"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -10,6 +11,27 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
+
+func GetTwitterPhotoUrls(postLink string) (*MediaUrlInfo, error) {
+	myUrl, err := url.Parse(postLink)
+	print(err)
+
+	myStrs := strings.Split(myUrl.Path, "/")
+	postId := myStrs[len(myStrs)-1]
+	theTwit, err := TwitterClient.GetTweet(postId)
+	if err != nil {
+		return nil, err
+	}
+
+	profile, err := TwitterClient.GetProfile(theTwit.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	print(profile.Name)
+
+	return nil, nil
+}
 
 func GetIdFromToken(token string) int64 {
 	if !strings.Contains(token, ":") {
@@ -25,7 +47,9 @@ func GetIdFromToken(token string) int64 {
 }
 
 func SendAlert(b *gotgbot.Bot, m *gotgbot.Message, md mdparser.WMarkDown) error {
-	_, err := m.Reply(b, md.ToString(), &gotgbot.SendMessageOpts{ParseMode: MarkDownV2})
+	_, err := m.Reply(b, md.ToString(), &gotgbot.SendMessageOpts{
+		ParseMode: gotgbot.ParseModeMarkdownV2,
+	})
 	if err != nil {
 		log.Println(err)
 	}
@@ -37,7 +61,7 @@ func SafeReply(b *gotgbot.Bot, ctx *ext.Context, output string) error {
 	msg := ctx.EffectiveMessage
 	if len(output) < 4096 {
 		_, err := msg.Reply(b, output,
-			&gotgbot.SendMessageOpts{ParseMode: MarkDownV2})
+			&gotgbot.SendMessageOpts{ParseMode: gotgbot.ParseModeMarkdownV2})
 		if err != nil {
 			logging.Error("got an error when trying to send results: ", err)
 			return err
