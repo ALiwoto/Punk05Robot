@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"log"
 	"net/url"
 	"strconv"
@@ -14,10 +15,16 @@ import (
 
 func GetTwitterPhotoUrls(postLink string) (*MediaUrlInfo, error) {
 	myUrl, err := url.Parse(postLink)
-	print(err)
+	if err != nil {
+		return nil, err
+	}
 
 	myStrs := strings.Split(myUrl.Path, "/")
 	postId := myStrs[len(myStrs)-1]
+	if postId == "" {
+		return nil, errors.New("empty post-id specified, make sure the post link is correct")
+	}
+
 	theTwit, err := TwitterClient.GetTweet(postId)
 	if err != nil {
 		return nil, err
@@ -28,9 +35,10 @@ func GetTwitterPhotoUrls(postLink string) (*MediaUrlInfo, error) {
 		return nil, err
 	}
 
-	print(profile.Name)
-
-	return nil, nil
+	return &MediaUrlInfo{
+		Urls:  theTwit.Photos,
+		Owner: profile.Name,
+	}, nil
 }
 
 func GetIdFromToken(token string) int64 {
