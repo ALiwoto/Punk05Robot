@@ -55,8 +55,9 @@ func (m *MediaUrlInfo) getPhotoArray(caption string) []gotgbot.InputMedia {
 		for i, current := range m.Urls {
 			if i == len(m.Urls)-1 && !captionDone {
 				myArray = append(myArray, gotgbot.InputMediaPhoto{
-					Media:   current,
-					Caption: caption,
+					Media:     current,
+					Caption:   caption,
+					ParseMode: gotgbot.ParseModeMarkdownV2,
 				})
 				captionDone = true
 				continue
@@ -72,8 +73,9 @@ func (m *MediaUrlInfo) getPhotoArray(caption string) []gotgbot.InputMedia {
 		for i, current := range m.Files {
 			if i == len(m.Files)-1 && !captionDone {
 				myArray = append(myArray, gotgbot.InputMediaPhoto{
-					Media:   current.Data,
-					Caption: caption,
+					Media:     current.Data,
+					Caption:   caption,
+					ParseMode: gotgbot.ParseModeMarkdownV2,
 				})
 				captionDone = true
 				continue
