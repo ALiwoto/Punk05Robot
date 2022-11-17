@@ -7,14 +7,18 @@ import (
 	"testing"
 
 	"github.com/AnimeKaizoku/Punk05Robot/src/core/downloadUtils"
-	"github.com/AnimeKaizoku/Punk05Robot/src/core/utils"
 	twitterscraper "github.com/n0madic/twitter-scraper"
 )
 
 func TestGetTwitterPic(t *testing.T) {
 	//utils.GetTwitterPhotoUrls("https://twitter.com/gabiran_/status/1590689796812582913?server=19")
 	//utils.GetTwitterPhotoUrls("https://twitter.com/HitenKei/status/1591051073133113346?s=20&t=6jqNWiXWFRO3vhwwNiZExg")
-	utils.GetTwitterPhotoUrls("https://twitter.com/haori_crescendo/status/1586563553414172672?s=20&t=6jqNWiXWFRO3vhwwNiZExg")
+	_, err := downloadUtils.GetTwitterMediaInfo("https://twitter.com/haori_crescendo/status/1586563553414172672?s=20&t=6jqNWiXWFRO3vhwwNiZExg")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
 	s := twitterscraper.New()
 	twitt, err := s.GetTweet("1590689796812582913")
 	if err != nil {

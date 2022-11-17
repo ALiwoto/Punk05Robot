@@ -2,9 +2,94 @@ package downloadUtils
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
+	"net/url"
+	"strings"
 )
+
+func IsSupportedUploadingUrl(value string) bool {
+	value = strings.ReplaceAll(strings.ReplaceAll(strings.ToLower(value), "https://", ""), "http://", "")
+	for current := range UrlUploaderHandlers {
+		if strings.HasPrefix(value, current) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func GetUrlUploaderHandler(theUrl string) MediaDownloadHandler {
+	if theUrl == "" {
+		return nil
+	}
+
+	theUrl = strings.ReplaceAll(strings.ReplaceAll(strings.ToLower(theUrl), "https://", ""), "http://", "")
+	for key, handlerValue := range UrlUploaderHandlers {
+		if strings.HasPrefix(theUrl, key) {
+			return handlerValue
+		}
+	}
+
+	return nil
+}
+
+func GetTwitterMediaInfo(postLink string) (*MediaUrlInfo, error) {
+	myUrl, err := url.Parse(postLink)
+	if err != nil {
+		return nil, err
+	}
+
+	myStrs := strings.Split(myUrl.Path, "/")
+	postId := myStrs[len(myStrs)-1]
+	if postId == "" {
+		return nil, errors.New("empty post-id specified, make sure the post link is correct")
+	}
+
+	theTwit, err := TwitterClient.GetTweet(postId)
+	if err != nil {
+		return nil, err
+	}
+
+	// profile, err := TwitterClient.GetProfile(theTwit.Username)
+	// if err != nil {
+	// return nil, err
+	// }
+
+	return &MediaUrlInfo{
+		Urls:  theTwit.Photos,
+		Owner: theTwit.Username,
+	}, nil
+}
+
+func GetPixivMediaInfo(postLink string) (*MediaUrlInfo, error) {
+	rawInfo, err := GetPixivIllustrateInfo(postLink)
+	if err != nil {
+		return nil, err
+	} else if rawInfo.Error {
+		return nil, errors.New(rawInfo.Message)
+	}
+
+	mediaInfo := new(MediaUrlInfo)
+	mediaInfo.Owner = rawInfo.Body.UserAccount
+
+	var currentPicData []byte
+	for currentPage := 0; currentPage < rawInfo.Body.PageCount; currentPage++ {
+		currentPicData, err = rawInfo.DownloadPage(currentPage)
+		if err != nil || len(currentPicData) == 0 {
+			continue
+		}
+
+		mediaInfo.Files = append(mediaInfo.Files, &MediaFile{
+			Data: currentPicData,
+		})
+	}
+
+	return mediaInfo, nil
+}
+
+//---------------------------------------------------------
 
 func GetPixivIllustrateInfo(linkUrl string) (*PixivInfoResponse, error) {
 

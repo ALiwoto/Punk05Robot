@@ -3,8 +3,8 @@ package repostPlugin
 import (
 	"time"
 
+	"github.com/AnimeKaizoku/Punk05Robot/src/core/downloadUtils"
 	"github.com/AnimeKaizoku/Punk05Robot/src/core/logging"
-	"github.com/AnimeKaizoku/Punk05Robot/src/core/utils"
 	wv "github.com/AnimeKaizoku/Punk05Robot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/Punk05Robot/src/database"
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -92,7 +92,7 @@ func repostMessageResponse(b *gotgbot.Bot, ctx *ext.Context) error {
 		Ctx:                 ctx,
 		Settings:            settings,
 		ShouldDeleteMessage: shouldDeleteMessage,
-		IsUrlUpload:         msg.Text != "",
+		UrlUploadHandler:    downloadUtils.GetUrlUploaderHandler(msg.Text),
 		Handler:             handleRepost,
 		RegisteredTime:      time.Now(),
 		TimeDistance:        distance,
@@ -152,14 +152,15 @@ func handleRepost(job *wv.PendingJob) error {
 	bot := job.Bot
 	var err error
 
-	if job.IsUrlUpload {
+	if job.UrlUploadHandler != nil {
 		// TODO: Support other kinds of url later, for now, we only support
 		// Twitter. Pixiv is planned to be supported in future version.
-		media, err := utils.GetTwitterPhotoUrls(msg.Text)
+		media, err := job.UrlUploadHandler(msg.Text)
 		if err != nil {
 			// TODO: add a new field to channel settings called `log_chat`, and send the error
 			// to that chat as well.
 			logging.Error(err)
+			return err
 		}
 
 		job.MediaOnCaptionName = media.Owner

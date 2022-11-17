@@ -3,6 +3,7 @@ package wotoValues
 import (
 	"time"
 
+	"github.com/AnimeKaizoku/Punk05Robot/src/core/downloadUtils"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
@@ -15,7 +16,7 @@ type PendingJob struct {
 	MediaOnCaptionName  string
 	MediaOnCaptionUrl   string
 	ShouldDeleteMessage bool
-	IsUrlUpload         bool
+	UrlUploadHandler    downloadUtils.MediaDownloadHandler
 
 	Handler         func(job *PendingJob) error
 	ButtonGenerator func(job *PendingJob) *gotgbot.InlineKeyboardMarkup

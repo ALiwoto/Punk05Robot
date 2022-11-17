@@ -1,9 +1,7 @@
 package utils
 
 import (
-	"errors"
 	"log"
-	"net/url"
 	"strconv"
 	"strings"
 
@@ -12,45 +10,6 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
-
-func IsSupportedUploadingUrl(value string) bool {
-	value = strings.ReplaceAll(strings.ReplaceAll(strings.ToLower(value), "https://", ""), "http://", "")
-	for current := range SupportedUploadingUrl {
-		if strings.HasPrefix(value, current) {
-			return true
-		}
-	}
-
-	return false
-}
-
-func GetTwitterPhotoUrls(postLink string) (*MediaUrlInfo, error) {
-	myUrl, err := url.Parse(postLink)
-	if err != nil {
-		return nil, err
-	}
-
-	myStrs := strings.Split(myUrl.Path, "/")
-	postId := myStrs[len(myStrs)-1]
-	if postId == "" {
-		return nil, errors.New("empty post-id specified, make sure the post link is correct")
-	}
-
-	theTwit, err := TwitterClient.GetTweet(postId)
-	if err != nil {
-		return nil, err
-	}
-
-	// profile, err := TwitterClient.GetProfile(theTwit.Username)
-	// if err != nil {
-	// return nil, err
-	// }
-
-	return &MediaUrlInfo{
-		Urls:  theTwit.Photos,
-		Owner: theTwit.Username,
-	}, nil
-}
 
 func GetIdFromToken(token string) int64 {
 	if !strings.Contains(token, ":") {

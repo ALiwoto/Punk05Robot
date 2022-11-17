@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/ALiwoto/mdparser/mdparser"
-	"github.com/AnimeKaizoku/Punk05Robot/src/core/utils"
+	"github.com/AnimeKaizoku/Punk05Robot/src/core/downloadUtils"
 	wv "github.com/AnimeKaizoku/Punk05Robot/src/core/wotoValues"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -47,7 +47,7 @@ func getButtons(job *wv.PendingJob) *gotgbot.InlineKeyboardMarkup {
 }
 
 func isMediaMessage(msg *gotgbot.Message) bool {
-	if msg.Text != "" && utils.IsSupportedUploadingUrl(msg.Text) {
+	if msg.Text != "" && downloadUtils.IsSupportedUploadingUrl(msg.Text) {
 		return true
 	}
 

@@ -1,5 +1,25 @@
 package downloadUtils
 
+// MediaUrlInfo contains information about a media obtained from a certain url in a certain
+// media platform (such as twitter, pixiv, etc etc...)
+type MediaUrlInfo struct {
+	// Urls field is an array of direct url to the medias, owned by
+	// same person/account that posted it.
+	Urls []string
+
+	// Files field specifies the files that has to be manually
+	// uploaded to the tg by the bot.
+	// In the case `Urls` is nil or empty, this field might be non-empty.
+	Files []*MediaFile
+
+	// Owner is the owner of the media(s) posted with that url.
+	Owner string
+}
+
+type MediaFile struct {
+	Data []byte
+}
+
 type PixivInfoResponse struct {
 	Error   bool           `json:"error"`
 	Message string         `json:"message"`
@@ -34,3 +54,5 @@ type PixivUrls struct {
 	Regular  string `json:"regular"`
 	Original string `json:"original"`
 }
+
+type MediaDownloadHandler func(inputUrl string) (*MediaUrlInfo, error)

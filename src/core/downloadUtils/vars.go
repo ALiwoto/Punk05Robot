@@ -1,6 +1,17 @@
 package downloadUtils
 
-import "errors"
+import (
+	"errors"
+
+	twitterLib "github.com/n0madic/twitter-scraper"
+)
+
+var TwitterClient = twitterLib.New()
+
+var UrlUploaderHandlers = map[string]MediaDownloadHandler{
+	"twitter.com/": GetTwitterMediaInfo,
+	"pixiv.net/":   GetPixivMediaInfo,
+}
 
 // pixiv error vars
 var (
