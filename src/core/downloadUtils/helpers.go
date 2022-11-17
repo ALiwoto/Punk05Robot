@@ -10,8 +10,15 @@ import (
 	"strings"
 )
 
+func PurifyUrl(theUrl string) string {
+	theUrl = strings.ReplaceAll(strings.ReplaceAll(strings.ToLower(theUrl), "https://", ""), "http://", "")
+	theUrl = strings.ReplaceAll(theUrl, "www.", "")
+
+	return theUrl
+}
+
 func IsSupportedUploadingUrl(value string) bool {
-	value = strings.ReplaceAll(strings.ReplaceAll(strings.ToLower(value), "https://", ""), "http://", "")
+	value = PurifyUrl(value)
 	for current := range UrlUploaderHandlers {
 		if strings.HasPrefix(value, current) {
 			return true
@@ -26,7 +33,7 @@ func GetUrlUploaderHandler(theUrl string) MediaDownloadHandler {
 		return nil
 	}
 
-	theUrl = strings.ReplaceAll(strings.ReplaceAll(strings.ToLower(theUrl), "https://", ""), "http://", "")
+	theUrl = PurifyUrl(theUrl)
 	for key, handlerValue := range UrlUploaderHandlers {
 		if strings.HasPrefix(theUrl, key) {
 			return handlerValue
