@@ -166,6 +166,30 @@ func handleRepost(job *wv.PendingJob) error {
 		job.MediaOnCaptionName = media.Owner
 		job.MediaOnCaptionUrl = msg.Text
 
+		switch {
+		case len(media.Files)+len(media.Urls) > 1:
+			_, err = bot.SendMediaGroup(
+				chat.Id,
+				media.GetMediaGroup(job.GetPostCaption()),
+				nil,
+			)
+			return err
+		case len(media.Urls) != 0:
+			_, err = bot.SendPhoto(chat.Id, media.Urls[0], &gotgbot.SendPhotoOpts{
+				Caption:     job.GetPostCaption(),
+				ReplyMarkup: job.GenerateButtons(),
+				ParseMode:   gotgbot.ParseModeMarkdownV2,
+			})
+			return err
+		case len(media.Files) != 0:
+			_, err = bot.SendPhoto(chat.Id, media.Files[0].Data, &gotgbot.SendPhotoOpts{
+				Caption:     job.GetPostCaption(),
+				ReplyMarkup: job.GenerateButtons(),
+				ParseMode:   gotgbot.ParseModeMarkdownV2,
+			})
+			return err
+		}
+
 		// TODO: Add support for sending a media group (photo album), here, if urls are multiple.
 		_, err = bot.SendPhoto(chat.Id, media.Urls[0], &gotgbot.SendPhotoOpts{
 			Caption:     job.GetPostCaption(),
