@@ -39,6 +39,8 @@ type PixivInfoBody struct {
 	Description   string          `json:"description"`
 	IllustType    PixivIllustType `json:"illustType"`
 	Sl            int             `json:"sl"`
+	Width         int             `json:"width"`
+	Height        int             `json:"height"`
 	PageCount     int             `json:"pageCount"`
 	ViewCount     int             `json:"viewCount"`
 	IsUnlisted    bool            `json:"isUnlisted"`

@@ -27,11 +27,18 @@ func (p *PixivInfoBody) DownloadPage(page int) ([]byte, error) {
 
 func (p *PixivInfoBody) GetDirectUrlByPage(page int) string {
 	if page == 0 {
-		return p.Urls.Original
+		return p.GetProperUrl()
 	}
 
-	rawUrl := strings.TrimSuffix(p.Urls.Original, "_p0.jpg")
-	return rawUrl + "_p" + strconv.Itoa(page) + ".jpg"
+	return strings.ReplaceAll(p.GetProperUrl(), "_p0", "_p"+strconv.Itoa(page))
+}
+
+func (p *PixivInfoBody) GetProperUrl() string {
+	if p.Width >= 720 || p.Height >= 720 {
+		return p.Urls.Regular
+	}
+
+	return p.Urls.Original
 }
 
 //---------------------------------------------------------
