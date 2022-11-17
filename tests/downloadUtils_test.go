@@ -60,7 +60,28 @@ func TestGetTwitterPic(t *testing.T) {
 }
 
 func TestGetPixivInfo(t *testing.T) {
-	info, err := downloadUtils.GetPixivIllustrateInfoById("101670857")
+	info, err := downloadUtils.GetPixivIllustrateInfo("https://www.pixiv.net/member_illust.php?mode=medium&illust_id=102825614")
+	if err != nil {
+		t.Error("when trying to use GetPixivIllustrateInfo:", err)
+		return
+	}
+	if info.Error {
+		t.Error("when trying to get illust info:", info.Message)
+		return
+	}
+
+	info, err = downloadUtils.GetPixivIllustrateInfo("https://www.pixiv.net/artworks/102825614")
+	if err != nil {
+		t.Error("when trying to use GetPixivIllustrateInfoById:", err)
+		return
+	}
+
+	if info.Error {
+		t.Error("when trying to get illust info:", info.Message)
+		return
+	}
+
+	info, err = downloadUtils.GetPixivIllustrateInfoById("101670857")
 	if err != nil {
 		t.Error("when trying to use GetPixivIllustrateInfoById:", err)
 		return

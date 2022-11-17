@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"path"
 	"strings"
 )
 
@@ -92,8 +93,30 @@ func GetPixivMediaInfo(postLink string) (*MediaUrlInfo, error) {
 //---------------------------------------------------------
 
 func GetPixivIllustrateInfo(linkUrl string) (*PixivInfoResponse, error) {
+	linkUrl = strings.ToLower(linkUrl)
+	// as far as I know, there is only 2 types of links which points to
+	// a pixiv illustrate:
+	//  1- https://www.pixiv.net/artworks/ILLUST_ID
+	//  2- https://www.pixiv.net/member_illust.php?mode=medium&illust_id=ILLUST_ID
+	//
+	// I will add support for more types once I come across another types.
 
-	return nil, nil
+	theId := ""
+	switch {
+	case strings.Contains(linkUrl, "/member_illust.php"):
+		theValues, err := url.ParseQuery(linkUrl)
+		if err != nil {
+			return nil, err
+		}
+
+		theId = theValues.Get("illust_id")
+	case strings.Contains(linkUrl, "/artworks/"):
+		theId = path.Base(linkUrl)
+	default:
+		return nil, ErrPixivUrlInvalid
+	}
+
+	return GetPixivIllustrateInfoById(theId)
 }
 
 func GetPixivIllustrateInfoById(illustId string) (*PixivInfoResponse, error) {
